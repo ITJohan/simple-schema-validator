@@ -9,7 +9,7 @@ describe(define.name, () => {
 
     const schema = define(id);
 
-    assertEquals(schema.parse(1), 1);
+    assertEquals(schema(1), 1);
   });
 
   it("should return an object with a piped parse function given multiple functions", () => {
@@ -22,6 +22,6 @@ describe(define.name, () => {
 
     const schema = define(toNumber, addTwo, toString);
 
-    assertEquals(schema.parse("1"), "3");
+    assertEquals(schema("1"), "3");
   });
 });

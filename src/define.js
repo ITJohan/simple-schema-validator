@@ -3,7 +3,7 @@
  * @template B
  * @overload
  * @param {(x: A) => B} fn1
- * @returns {{parse: (x: A) => B}}
+ * @returns {(x: A) => B}
  */
 
 /**
@@ -13,7 +13,7 @@
  * @overload
  * @param {(x: A) => B} fn1
  * @param {(x: B) => C} fn2
- * @returns {{parse: (x: A) => C}}
+ * @returns {(x: A) => C}
  */
 
 /**
@@ -25,7 +25,7 @@
  * @param {(x: A) => B} fn1
  * @param {(x: B) => C} fn2
  * @param {(x: C) => D} fn3
- * @returns {{parse: (x: A) => D}}
+ * @returns {(x: A) => D}
  */
 
 /**
@@ -39,7 +39,7 @@
  * @param {(x: B) => C} fn2
  * @param {(x: C) => D} fn3
  * @param {(x: D) => E} fn4
- * @returns {{parse: (x: A) => E}}
+ * @returns {(x: A) => E}
  */
 
 /**
@@ -55,16 +55,14 @@
  * @param {(x: C) => D} fn3
  * @param {(x: D) => E} fn4
  * @param {(x: E) => F} fn5
- * @returns {{parse: (x: A) => F}}
+ * @returns {(x: A) => F}
  */
 
 /** @param {Function[]} fns */
 const define = (...fns) => {
   if (fns.length >= 1 && fns.length <= 5) {
-    return {
-      /** @param {any} x */
-      parse: (x) => fns.reduce((acc, func) => func(acc), x),
-    };
+    /** @param {any} x */
+    return (x) => fns.reduce((acc, func) => func(acc), x);
   }
 
   throw new Error("Requires at least one function and at most five.");
