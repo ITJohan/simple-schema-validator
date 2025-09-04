@@ -1,9 +1,9 @@
 /** @import {Either} from "simple-functions" */
 
-import { left, pipe, right } from "simple-functions";
+import { chain, left, pipe, right } from "simple-functions";
 import { describe, it } from "@std/testing/bdd";
 import { object } from "./object.js";
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertStringIncludes } from "@std/assert";
 
 describe(object.name, () => {
   /**
@@ -26,8 +26,18 @@ describe(object.name, () => {
     }
     return right(x);
   };
+  /**
+   * @param {number} min
+   * @returns {(x: number) => Either<string, number>}
+   */
+  const min = (min) => (x) => {
+    if (x < min) {
+      return left(`Number ${x} is less than ${min}`);
+    }
+    return right(x);
+  };
 
-  it("should return a schema with a parse function that validates a given object", () => {
+  it("should return a validator that validates a given object", () => {
     const User = object({
       id: pipe(number),
       name: pipe(string),
@@ -36,5 +46,19 @@ describe(object.name, () => {
     const validatedUser = User(user);
 
     assertEquals(validatedUser.inspect(), user);
+  });
+
+  it("should return a validator that invalidates a given object", () => {
+    const User = object({
+      id: pipe(number, chain(min(4))),
+      name: pipe(string),
+    });
+    const user = { id: 1, name: "john" };
+    const validatedUser = User(user);
+
+    assertStringIncludes(
+      validatedUser.inspect().toString(),
+      "Number 1 is less than 4",
+    );
   });
 });

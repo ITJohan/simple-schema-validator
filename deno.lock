@@ -70,7 +70,15 @@
     "https://raw.githubusercontent.com/ITJohan/simple-functions/b6692ec/src/utils/compose.js": "87758b88069d0a2e3e383e1085cf7fba3e0d345980d6f8ccf24caea8f159a4f8",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/b6692ec/src/utils/curry.js": "c1976b9d117988e75b355394894a87d1769f86fade3df04c523ead430fed1b97",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/b6692ec/src/utils/pipe.js": "d3dffe45fbb5223dae5b6c8ab08c1e5b1a23d5142ed7dc3a19d13495f1d879c9",
-    "https://raw.githubusercontent.com/ITJohan/simple-functions/b6692ec/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444"
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/b6692ec/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/index.js": "945fb31dc4870a96f8f1a7c3c8c49cee8dd12d9b1fc158d13cdc50a3bdd1c5db",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/containers/either.js": "9c1b2edea6dc680d6ba86a9437757eebda5ef1d04252b7d6c1bfac663b90cb19",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/types.js": "9ce92613823bae95c7b681b0c738e1240975203dc4ff61588091e6673416fb0b",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/chain.js": "8975b9c54a24aa5531ffb26da8dc8adf56512c8a9ed89060d865bad20254b47d",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/compose.js": "87758b88069d0a2e3e383e1085cf7fba3e0d345980d6f8ccf24caea8f159a4f8",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/curry.js": "c1976b9d117988e75b355394894a87d1769f86fade3df04c523ead430fed1b97",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/pipe.js": "5fd2a43d27ad2c515167673803321b4a68a7faea52f3e4c609515ffa002f3ee7",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444"
   },
   "workspace": {
     "dependencies": [
