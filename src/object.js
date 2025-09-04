@@ -1,36 +1,47 @@
-/** @import { Either } from "simple-functions" */
 /** @import { Validator } from "./types.js" */
 
 import { left, right } from "simple-functions";
 
 /**
- * @template E
- * @template {Object<string, Validator<any>>} T
- * @param {T} shape
- * @returns {(
- * (value: any) =>
- *  Either<E, { [K in keyof T]: T[K] extends Validator<infer O> ? O : never }>
- * )}
+ * Creates a validator for an object shape
+ * @template {Object<string, Validator<any, any>>} T The shape of the validator schema
+ * @param {T} shape The validator schema
+ * @returns {Validator<
+ * { [K in keyof T]: T[K] extends Validator<infer Err, any> ? Err : never }[keyof T],
+ * { [K in keyof T]: T[K] extends Validator<any, infer Val> ? Val : never }
+ * >}
  */
 const object = (shape) => (value) => {
   if (typeof value !== "object" || value === null) {
     return left("Validation failed: Expected an object.");
   }
 
-  /** @type {Partial<T>} */
   const result = {};
+
   for (const key in shape) {
     if (!(key in value)) {
       return left(`Validation failed: Missing required key "${key}".`);
     }
-    try {
-      result[key] = shape[key](value[key]);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      return left(`Validation failed at key "${key}": ${message}`);
+
+    const propValue = value[key];
+    const validator = shape[key];
+    const validationResult = validator(propValue);
+    const maybeError = validationResult.fold(
+      (error) => left(`Validation failed at key "${key}": ${error}`),
+      (validatedProp) => {
+        // @ts-ignore: valid cast
+        result[key] = validatedProp;
+        return null; // Signal success for this property
+      },
+    );
+
+    // If fold returned a Left, short-circuit and exit immediately
+    if (maybeError) {
+      return maybeError;
     }
   }
 
+  // All validations were successful
   return /** @type {any} */ (right(result));
 };
 

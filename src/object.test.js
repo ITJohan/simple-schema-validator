@@ -1,24 +1,30 @@
 /** @import {Either} from "simple-functions" */
 
-import { pipe } from "simple-functions";
+import { left, pipe, right } from "simple-functions";
 import { describe, it } from "@std/testing/bdd";
 import { object } from "./object.js";
 import { assertEquals } from "@std/assert";
 
 describe(object.name, () => {
-  /** @param {any} x */
+  /**
+   * @param {any} x
+   * @returns {Either<string, string>}
+   */
   const string = (x) => {
     if (typeof x !== "string") {
-      throw new Error();
+      return left("Not a string");
     }
-    return x;
+    return right(x);
   };
-  /** @param {any} x */
+  /**
+   * @param {any} x
+   * @returns {Either<string, number>}
+   */
   const number = (x) => {
     if (typeof x !== "number") {
-      throw new Error();
+      return left("Not a number");
     }
-    return x;
+    return right(x);
   };
 
   it("should return a schema with a parse function that validates a given object", () => {
@@ -29,6 +35,6 @@ describe(object.name, () => {
     const user = { id: 1, name: "john" };
     const validatedUser = User(user);
 
-    assertEquals(validatedUser.fold((e) => e, (user) => user), user);
+    assertEquals(validatedUser.inspect(), user);
   });
 });
