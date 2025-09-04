@@ -1,1 +1,1 @@
-export { define } from "./src/define.js";
+export { object } from "./src/object.js";
