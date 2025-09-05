@@ -11,19 +11,19 @@ import { left, right } from "simple-functions";
  * { [K in keyof T]: T[K] extends Validator<any, infer Val> ? Val : never }
  * >}
  */
-const object = (shape) => (value) => {
-  if (typeof value !== "object" || value === null) {
-    return left("Validation failed: Expected an object.");
+const object = (shape) => (x) => {
+  if (typeof x !== "object" || x === null) {
+    return left(`${x} is not an object.`);
   }
 
   const result = {};
 
   for (const key in shape) {
-    if (!(key in value)) {
-      return left(`Validation failed: Missing required key "${key}".`);
+    if (!(key in x)) {
+      return left(`Missing required key "${key}".`);
     }
 
-    const propValue = value[key];
+    const propValue = x[key];
     const validator = shape[key];
     const validationResult = validator(propValue);
     const maybeError = validationResult.fold(
