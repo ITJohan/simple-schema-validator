@@ -1,4 +1,4 @@
-/** @import { Validator } from "./types.js" */
+/** @import { Validator } from "../types.js" */
 
 import { left, right } from "simple-functions";
 

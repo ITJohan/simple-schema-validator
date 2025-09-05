@@ -1,4 +1,4 @@
-export { boolean } from "./src/boolean.js";
-export { number } from "./src/number.js";
-export { object } from "./src/object.js";
-export { string } from "./src/string.js";
+export { boolean } from "./src/primitives/boolean.js";
+export { number } from "./src/primitives/number.js";
+export { object } from "./src/primitives/object.js";
+export { string } from "./src/primitives/string.js";

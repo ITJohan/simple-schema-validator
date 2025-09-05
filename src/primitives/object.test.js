@@ -1,5 +1,5 @@
 /** @import {Either} from "simple-functions" */
-/** @import {Schema} from "./types.js" */
+/** @import {Schema} from "../types.js" */
 
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
