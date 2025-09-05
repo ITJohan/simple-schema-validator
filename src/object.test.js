@@ -1,4 +1,5 @@
 /** @import {Either} from "simple-functions" */
+/** @import {Schema} from "./types.js" */
 
 import { chain, left, pipe, right } from "simple-functions";
 import { describe, it } from "@std/testing/bdd";
@@ -44,6 +45,12 @@ describe(object.name, () => {
     });
     const user = { id: 1, name: "john" };
     const validatedUser = User(user);
+
+    /** @type {Schema<User>} */
+    const test = {
+      id: 0,
+      name: "",
+    };
 
     assertEquals(validatedUser.inspect(), user);
   });
