@@ -19,24 +19,24 @@ describe(boolean.name, () => {
     const bool4 = boolean(() => {});
 
     assertEquals(
-      bool.fold((err) => err, (val) => String(val)),
-      " is not a boolean.",
+      bool.fold((err) => err.message, (val) => String(val)),
+      "Not a boolean.",
     );
     assertEquals(
-      bool1.fold((err) => err, (val) => String(val)),
-      "NaN is not a boolean.",
+      bool1.fold((err) => err.message, (val) => String(val)),
+      "Not a boolean.",
     );
     assertEquals(
-      bool2.fold((err) => err, (val) => String(val)),
-      "0 is not a boolean.",
+      bool2.fold((err) => err.message, (val) => String(val)),
+      "Not a boolean.",
     );
     assertEquals(
-      bool3.fold((err) => err, (val) => String(val)),
-      "[object Object] is not a boolean.",
+      bool3.fold((err) => err.message, (val) => String(val)),
+      "Not a boolean.",
     );
     assertEquals(
-      bool4.fold((err) => err, (val) => String(val)),
-      "() => {} is not a boolean.",
+      bool4.fold((err) => err.message, (val) => String(val)),
+      "Not a boolean.",
     );
   });
 });

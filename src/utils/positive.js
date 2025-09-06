@@ -1,10 +1,13 @@
 import { Either } from "simple-functions";
+import { ValidationError } from "../validation-error.js";
 
 /**
  * @param {number} x
- * @returns {Either<string, number>}
+ * @returns {Either<ValidationError, number>}
  */
 const positive = (x) =>
-  x <= 0 ? Either.left(`${x} is less than 0.`) : Either.right(x);
+  x <= 0
+    ? Either.left(new ValidationError("Number is not positive.", { value: x }))
+    : Either.right(x);
 
 export { positive };

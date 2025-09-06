@@ -6,14 +6,17 @@ import { Either } from "simple-functions";
 import { number } from "./number.js";
 import { string } from "./string.js";
 import { object } from "./object.js";
+import { ValidationError } from "../validation-error.js";
 
 describe(object.name, () => {
   /**
    * @param {number} min
-   * @returns {(x: number) => Either<string, number>}
+   * @returns {(x: number) => Either<ValidationError, number>}
    */
   const min = (min) => (x) =>
-    x < min ? Either.left(`${x} is less than ${min}`) : Either.right(x);
+    x < min
+      ? Either.left(new ValidationError("Too small", { value: x }))
+      : Either.right(x);
 
   it("should return a validator that validates a given object", () => {
     const User = object({
@@ -38,7 +41,7 @@ describe(object.name, () => {
 
     assertStringIncludes(
       String(validatedUser.inspect()),
-      'Validation failed at key "id": 1 is less than 4',
+      "Validation failed: Too small",
     );
   });
 });

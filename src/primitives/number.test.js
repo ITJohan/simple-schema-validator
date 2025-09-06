@@ -21,24 +21,24 @@ describe(number.name, () => {
     const text4 = number(() => {});
 
     assertEquals(
-      text.fold((err) => err, (val) => String(val)),
-      " is not a number.",
+      text.fold((err) => err.message, (val) => String(val)),
+      "Not a number.",
     );
     assertEquals(
-      text1.fold((err) => err, (val) => String(val)),
-      "NaN is not a number.",
+      text1.fold((err) => err.message, (val) => String(val)),
+      "Not a number.",
     );
     assertEquals(
-      text2.fold((err) => err, (val) => String(val)),
-      "true is not a number.",
+      text2.fold((err) => err.message, (val) => String(val)),
+      "Not a number.",
     );
     assertEquals(
-      text3.fold((err) => err, (val) => String(val)),
-      "[object Object] is not a number.",
+      text3.fold((err) => err.message, (val) => String(val)),
+      "Not a number.",
     );
     assertEquals(
-      text4.fold((err) => err, (val) => String(val)),
-      "() => {} is not a number.",
+      text4.fold((err) => err.message, (val) => String(val)),
+      "Not a number.",
     );
   });
 });

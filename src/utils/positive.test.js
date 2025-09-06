@@ -19,16 +19,16 @@ describe(positive.name, () => {
     const result2 = positive(-Infinity);
 
     assertEquals(
-      result.fold((err) => err, (val) => String(val)),
-      "0 is less than 0.",
+      result.fold((err) => err.message, (val) => String(val)),
+      "Number is not positive.",
     );
     assertEquals(
-      result1.fold((err) => err, (val) => String(val)),
-      "-1 is less than 0.",
+      result1.fold((err) => err.message, (val) => String(val)),
+      "Number is not positive.",
     );
     assertEquals(
-      result2.fold((err) => err, (val) => String(val)),
-      "-Infinity is less than 0.",
+      result2.fold((err) => err.message, (val) => String(val)),
+      "Number is not positive.",
     );
   });
 });

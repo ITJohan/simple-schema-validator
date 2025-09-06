@@ -6,7 +6,10 @@ describe(email.name, () => {
   it("should validate a valid email", () => {
     const result = email("john@doe.com");
 
-    assertEquals(result.fold((err) => err, (val) => val), "john@doe.com");
+    assertEquals(
+      result.fold((err) => err.message, (val) => val),
+      "john@doe.com",
+    );
   });
 
   it("should invalidate an unvalid email", () => {
@@ -18,28 +21,28 @@ describe(email.name, () => {
     const result5 = email("");
 
     assertEquals(
-      result.fold((err) => err, (val) => val),
-      "john@doe. is not a valid email.",
+      result.fold((err) => err.message, (val) => val),
+      "Not a valid email.",
     );
     assertEquals(
-      result1.fold((err) => err, (val) => val),
-      "john@doe is not a valid email.",
+      result1.fold((err) => err.message, (val) => val),
+      "Not a valid email.",
     );
     assertEquals(
-      result2.fold((err) => err, (val) => val),
-      "johndoe.com is not a valid email.",
+      result2.fold((err) => err.message, (val) => val),
+      "Not a valid email.",
     );
     assertEquals(
-      result3.fold((err) => err, (val) => val),
-      "@doe.com is not a valid email.",
+      result3.fold((err) => err.message, (val) => val),
+      "Not a valid email.",
     );
     assertEquals(
-      result4.fold((err) => err, (val) => val),
-      "john is not a valid email.",
+      result4.fold((err) => err.message, (val) => val),
+      "Not a valid email.",
     );
     assertEquals(
-      result5.fold((err) => err, (val) => val),
-      " is not a valid email.",
+      result5.fold((err) => err.message, (val) => val),
+      "Not a valid email.",
     );
   });
 });
