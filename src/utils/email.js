@@ -1,14 +1,14 @@
-/** @import { Either } from "simple-functions" */
+/** @import { EitherValue } from "simple-functions" */
 
-import { left, right } from "simple-functions";
+import { Either } from "simple-functions";
 
 /**
  * @param {string} x
- * @returns {Either<string, string>}
+ * @returns {EitherValue<string, string>}
  */
 const email = (x) =>
   !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(x)
-    ? left(`${x} is not a valid email.`)
-    : right(x);
+    ? Either.left(`${x} is not a valid email.`)
+    : Either.right(x);
 
 export { email };

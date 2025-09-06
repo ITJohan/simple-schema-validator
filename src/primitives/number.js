@@ -1,12 +1,14 @@
-/** @import { Either } from "simple-functions" */
+/** @import { EitherValue } from "simple-functions" */
 
-import { left, right } from "simple-functions";
+import { Either } from "simple-functions";
 
 /**
  * @param {any} x
- * @returns {Either<string, number>}
+ * @returns {EitherValue<string, number>}
  */
 const number = (x) =>
-  typeof x !== "number" || isNaN(x) ? left(`${x} is not a number.`) : right(x);
+  typeof x !== "number" || isNaN(x)
+    ? Either.left(`${x} is not a number.`)
+    : Either.right(x);
 
 export { number };

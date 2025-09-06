@@ -1,6 +1,6 @@
 /** @import { Validator } from "../types.js" */
 
-import { left, right } from "simple-functions";
+import { Either } from "simple-functions";
 
 /**
  * Creates a validator for an object shape
@@ -13,21 +13,21 @@ import { left, right } from "simple-functions";
  */
 const object = (shape) => (x) => {
   if (typeof x !== "object" || x === null) {
-    return left(`${x} is not an object.`);
+    return Either.left(`${x} is not an object.`);
   }
 
   const result = {};
 
   for (const key in shape) {
     if (!(key in x)) {
-      return left(`Missing required key "${key}".`);
+      return Either.left(`Missing required key "${key}".`);
     }
 
     const propValue = x[key];
     const validator = shape[key];
     const validationResult = validator(propValue);
     const maybeError = validationResult.fold(
-      (error) => left(`Validation failed at key "${key}": ${error}`),
+      (error) => Either.left(`Validation failed at key "${key}": ${error}`),
       (validatedProp) => {
         // @ts-ignore: valid cast
         result[key] = validatedProp;
@@ -42,7 +42,7 @@ const object = (shape) => (x) => {
   }
 
   // All validations were successful
-  return /** @type {any} */ (right(result));
+  return /** @type {any} */ (Either.right(result));
 };
 
 export { object };

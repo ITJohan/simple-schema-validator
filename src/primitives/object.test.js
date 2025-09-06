@@ -1,9 +1,9 @@
-/** @import {Either} from "simple-functions" */
+/** @import {EitherValue} from "simple-functions" */
 /** @import {Schema} from "../types.js" */
 
 import { assertEquals, assertStringIncludes } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
-import { left, right } from "simple-functions";
+import { Either } from "simple-functions";
 import { number } from "./number.js";
 import { string } from "./string.js";
 import { object } from "./object.js";
@@ -11,10 +11,10 @@ import { object } from "./object.js";
 describe(object.name, () => {
   /**
    * @param {number} min
-   * @returns {(x: number) => Either<string, number>}
+   * @returns {(x: number) => EitherValue<string, number>}
    */
   const min = (min) => (x) =>
-    x < min ? left(`${x} is less than ${min}`) : right(x);
+    x < min ? Either.left(`${x} is less than ${min}`) : Either.right(x);
 
   it("should return a validator that validates a given object", () => {
     const User = object({

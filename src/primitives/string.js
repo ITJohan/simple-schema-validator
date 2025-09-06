@@ -1,12 +1,14 @@
-/** @import { Either } from "simple-functions" */
+/** @import { EitherValue } from "simple-functions" */
 
-import { left, right } from "simple-functions";
+import { Either } from "simple-functions";
 
 /**
  * @param {any} x
- * @returns {Either<string, string>}
+ * @returns {EitherValue<string, string>}
  */
 const string = (x) =>
-  typeof x !== "string" ? left(`${x} is not a string.`) : right(x);
+  typeof x !== "string"
+    ? Either.left(`${x} is not a string.`)
+    : Either.right(x);
 
 export { string };

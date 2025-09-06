@@ -78,7 +78,14 @@
     "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/compose.js": "87758b88069d0a2e3e383e1085cf7fba3e0d345980d6f8ccf24caea8f159a4f8",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/curry.js": "c1976b9d117988e75b355394894a87d1769f86fade3df04c523ead430fed1b97",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/pipe.js": "5fd2a43d27ad2c515167673803321b4a68a7faea52f3e4c609515ffa002f3ee7",
-    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444"
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/d974bad/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/index.js": "accf75e972d26173c7afbdff63fdf42bfce266522950129b26cd962c3d910eda",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/src/containers/either.js": "653508643996316b5f06d6642e1391cfdd6e371fb1368d969f55ddf5160717dd",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/src/types.js": "fd7a5458a002c52e4b119c8faaf77c83c5959aa5060e3b79c8833e7615db49a5",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/src/utils/compose.js": "87758b88069d0a2e3e383e1085cf7fba3e0d345980d6f8ccf24caea8f159a4f8",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/src/utils/curry.js": "c1976b9d117988e75b355394894a87d1769f86fade3df04c523ead430fed1b97",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/src/utils/pipe.js": "5fd2a43d27ad2c515167673803321b4a68a7faea52f3e4c609515ffa002f3ee7",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/f431e2c/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444"
   },
   "workspace": {
     "dependencies": [
