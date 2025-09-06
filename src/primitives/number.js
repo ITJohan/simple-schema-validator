@@ -1,10 +1,8 @@
-/** @import { EitherValue } from "simple-functions" */
-
 import { Either } from "simple-functions";
 
 /**
  * @param {any} x
- * @returns {EitherValue<string, number>}
+ * @returns {Either<string, number>}
  */
 const number = (x) =>
   typeof x !== "number" || isNaN(x)

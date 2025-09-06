@@ -1,10 +1,8 @@
-/** @import { EitherValue } from "simple-functions" */
-
 import { Either } from "simple-functions";
 
 /**
  * @param {any} x
- * @returns {EitherValue<string, boolean>}
+ * @returns {Either<string, boolean>}
  */
 const boolean = (x) =>
   typeof x !== "boolean"

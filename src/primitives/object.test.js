@@ -1,4 +1,3 @@
-/** @import {EitherValue} from "simple-functions" */
 /** @import {Schema} from "../types.js" */
 
 import { assertEquals, assertStringIncludes } from "@std/assert";
@@ -11,7 +10,7 @@ import { object } from "./object.js";
 describe(object.name, () => {
   /**
    * @param {number} min
-   * @returns {(x: number) => EitherValue<string, number>}
+   * @returns {(x: number) => Either<string, number>}
    */
   const min = (min) => (x) =>
     x < min ? Either.left(`${x} is less than ${min}`) : Either.right(x);

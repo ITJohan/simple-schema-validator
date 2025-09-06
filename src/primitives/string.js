@@ -1,10 +1,8 @@
-/** @import { EitherValue } from "simple-functions" */
-
 import { Either } from "simple-functions";
 
 /**
  * @param {any} x
- * @returns {EitherValue<string, string>}
+ * @returns {Either<string, string>}
  */
 const string = (x) =>
   typeof x !== "string"
