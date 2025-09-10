@@ -28,8 +28,18 @@ describe(object.name, () => {
     const result = user.validate(invalidUser);
 
     assertEquals(result.tag === "failure" && result.errors, [
-      { message: "Not a string.", property: "name", value: 1 },
-      { message: "Not a number.", property: "id", value: "John" },
+      {
+        tag: "validation-error",
+        message: "Not a string.",
+        property: "name",
+        value: 1,
+      },
+      {
+        tag: "validation-error",
+        message: "Not a number.",
+        property: "id",
+        value: "John",
+      },
     ]);
   });
 
@@ -43,7 +53,12 @@ describe(object.name, () => {
     const result = user.validate(invalidUser);
 
     assertEquals(result.tag === "failure" && result.errors, [
-      { message: "Number is not positive.", property: "id", value: -1 },
+      {
+        tag: "validation-error",
+        message: "Number is not positive.",
+        property: "id",
+        value: -1,
+      },
     ]);
   });
 });

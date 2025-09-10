@@ -11,7 +11,11 @@ import { assertEquals } from "@std/assert";
 const validateNum = (num) =>
   num >= 18
     ? validation.success(num)
-    : validation.failure([{ message: "Too low", value: num }]);
+    : validation.failure([{
+      tag: "validation-error",
+      message: "Too low",
+      value: num,
+    }]);
 
 describe("validation", () => {
   describe(validation.success.name, () => {
@@ -69,14 +73,23 @@ describe("validation", () => {
   describe(validation.failure.name, () => {
     it("should return a Validation<E, A> that has a tag = failure property", () => {
       assertEquals(
-        validation.failure([{ message: "Error", value: 123 }]).tag,
+        validation.failure([{
+          tag: "validation-error",
+          message: "Error",
+          value: 123,
+        }]).tag,
         "failure",
       );
     });
 
     it("should return a Validation<E, A> that has a errors = E property", () => {
-      const result = validation.failure([{ message: "Error", value: 123 }]);
+      const result = validation.failure([{
+        tag: "validation-error",
+        message: "Error",
+        value: 123,
+      }]);
       assertEquals(result.tag === "failure" && result.errors, [{
+        tag: "validation-error",
         message: "Error",
         value: 123,
       }]);
@@ -84,9 +97,11 @@ describe("validation", () => {
 
     it("should return a Validation<E, A> that maps to Validation<E, A>", () => {
       assertEquals(
-        validation.failure([{ message: "Error", value: 123 }]).map((num) =>
-          String(num)
-        ).fold(
+        validation.failure([{
+          tag: "validation-error",
+          message: "Error",
+          value: 123,
+        }]).map((num) => String(num)).fold(
           (err) => err[0].message,
           (val) => val,
         ),
@@ -96,7 +111,11 @@ describe("validation", () => {
 
     it("should return a Validation<E, A> that apply to Validation<E, A>", () => {
       assertEquals(
-        validation.failure([{ message: "Error", value: 123 }]).ap(
+        validation.failure([{
+          tag: "validation-error",
+          message: "Error",
+          value: 123,
+        }]).ap(
           validation.of(validateNum),
         ).fold(
           (err) => err[0].message,
@@ -108,7 +127,11 @@ describe("validation", () => {
 
     it("should return a Validation<E, A> that can fold to B", () => {
       assertEquals(
-        validation.failure([{ message: "Error", value: 123 }]).fold(
+        validation.failure([{
+          tag: "validation-error",
+          message: "Error",
+          value: 123,
+        }]).fold(
           (err) => err[0].message,
           (val) => val,
         ),
@@ -118,9 +141,11 @@ describe("validation", () => {
 
     it("should return a Validation<E, A> that can chain to E", () => {
       assertEquals(
-        validation.failure([{ message: "Error", value: "123" }]).chain((x) =>
-          validation.success(String(x))
-        )
+        validation.failure([{
+          tag: "validation-error",
+          message: "Error",
+          value: "123",
+        }]).chain((x) => validation.success(String(x)))
           .fold(
             (err) => err[0].message,
             (val) => String(val),

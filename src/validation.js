@@ -1,5 +1,6 @@
 /**
  * @typedef {object} ValidationError
+ * @prop {"validation-error"} tag
  * @prop {string} message
  * @prop {string} [property]
  * @prop {any} value

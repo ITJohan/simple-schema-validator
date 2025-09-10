@@ -8,7 +8,11 @@ import { validation } from "../validation.js";
  */
 const boolean = (x) =>
   typeof x !== "boolean"
-    ? validation.failure([{ message: "Not a boolean.", value: x }])
+    ? validation.failure([{
+      tag: "validation-error",
+      message: "Not a boolean.",
+      value: x,
+    }])
     : validation.success(x);
 
 export { boolean };

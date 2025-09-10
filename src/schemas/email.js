@@ -8,7 +8,11 @@ import { validation } from "../validation.js";
  */
 const email = (x) =>
   !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(x)
-    ? validation.failure([{ message: "Not a valid email.", value: x }])
+    ? validation.failure([{
+      tag: "validation-error",
+      message: "Not a valid email.",
+      value: x,
+    }])
     : validation.success(x);
 
 export { email };

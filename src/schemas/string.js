@@ -8,7 +8,11 @@ import { validation } from "../validation.js";
  */
 const string = (x) =>
   typeof x !== "string"
-    ? validation.failure([{ message: "Not a string.", value: x }])
+    ? validation.failure([{
+      tag: "validation-error",
+      message: "Not a string.",
+      value: x,
+    }])
     : validation.success(x);
 
 export { string };

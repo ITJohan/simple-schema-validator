@@ -8,7 +8,11 @@ import { validation } from "../validation.js";
  */
 const number = (x) =>
   typeof x !== "number" || isNaN(x)
-    ? validation.failure([{ message: "Not a number.", value: x }])
+    ? validation.failure([{
+      tag: "validation-error",
+      message: "Not a number.",
+      value: x,
+    }])
     : validation.success(x);
 
 export { number };

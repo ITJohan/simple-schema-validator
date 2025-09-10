@@ -8,7 +8,11 @@ import { validation } from "../validation.js";
  */
 const positive = (x) =>
   x <= 0
-    ? validation.failure([{ message: "Number is not positive.", value: x }])
+    ? validation.failure([{
+      tag: "validation-error",
+      message: "Number is not positive.",
+      value: x,
+    }])
     : validation.success(x);
 
 export { positive };
