@@ -13,6 +13,7 @@
  * @prop {A} value
  * @prop {<B>(fn: (x: A) => B) => Validation<E, B>} map
  * @prop {<B>(other: Validation<E, (x: A) => B>) => Validation<E, B>} ap
+ * @prop {<B>(fn: (x: A) => Validation<E, B>) => Validation<E, B>} chain
  * @prop {<B>(onFailure: (errors: E[]) => B, onSuccess: (value: A) => B) => B} fold
  */
 
@@ -24,6 +25,7 @@
  * @prop {E[]} errors
  * @prop {<B>(fn: (x: A) => B) => Validation<E, B>} map
  * @prop {<B>(other: Validation<E, (x: A) => B>) => Validation<E, B>} ap
+ * @prop {<B>(fn: (x: A) => Validation<E, B>) => Validation<E, B>} chain
  * @prop {<B>(onFailure: (errors: E[]) => B, onSuccess: (value: A) => B) => B} fold
  */
 
@@ -43,6 +45,7 @@ const success = (x) => ({
   tag: "success",
   value: x,
   map: (fn) => success(fn(x)),
+  chain: (fn) => fn(x),
   ap: (other) => {
     if (other.tag === "failure") {
       return failure(other.errors);
@@ -63,15 +66,14 @@ const failure = (x) => {
   const instance = {
     tag: "failure",
     errors: x,
-    map: () => {
-      return instance;
-    },
+    map: () => instance,
     ap: (other) => {
       if (other.tag === "failure") {
         return failure([...x, ...other.errors]);
       }
       return instance;
     },
+    chain: () => instance,
     fold: (onFailure, _onSuccess) => onFailure(x),
   };
   return instance;

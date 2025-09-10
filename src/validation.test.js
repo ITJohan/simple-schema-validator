@@ -53,6 +53,17 @@ describe("validation", () => {
         123,
       );
     });
+
+    it("should return a Validation<E, A> that can chain to Validation<E, B>", () => {
+      assertEquals(
+        validation.success(123).chain((x) => validation.success(String(x)))
+          .fold(
+            (err) => String(err),
+            (val) => String(val),
+          ),
+        "123",
+      );
+    });
   });
 
   describe(validation.failure.name, () => {
@@ -101,6 +112,19 @@ describe("validation", () => {
           (err) => err[0].message,
           (val) => val,
         ),
+        "Error",
+      );
+    });
+
+    it("should return a Validation<E, A> that can chain to E", () => {
+      assertEquals(
+        validation.failure([{ message: "Error", value: "123" }]).chain((x) =>
+          validation.success(String(x))
+        )
+          .fold(
+            (err) => err[0].message,
+            (val) => String(val),
+          ),
         "Error",
       );
     });
