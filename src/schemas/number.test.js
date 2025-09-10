@@ -21,23 +21,23 @@ describe(number.name, () => {
     const text4 = number(() => {});
 
     assertEquals(
-      text.fold((err) => err.message, (val) => String(val)),
+      text.fold((err) => err[0].message, (val) => String(val)),
       "Not a number.",
     );
     assertEquals(
-      text1.fold((err) => err.message, (val) => String(val)),
+      text1.fold((err) => err[0].message, (val) => String(val)),
       "Not a number.",
     );
     assertEquals(
-      text2.fold((err) => err.message, (val) => String(val)),
+      text2.fold((err) => err[0].message, (val) => String(val)),
       "Not a number.",
     );
     assertEquals(
-      text3.fold((err) => err.message, (val) => String(val)),
+      text3.fold((err) => err[0].message, (val) => String(val)),
       "Not a number.",
     );
     assertEquals(
-      text4.fold((err) => err.message, (val) => String(val)),
+      text4.fold((err) => err[0].message, (val) => String(val)),
       "Not a number.",
     );
   });

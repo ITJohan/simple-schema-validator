@@ -7,7 +7,7 @@ describe(email.name, () => {
     const result = email("john@doe.com");
 
     assertEquals(
-      result.fold((err) => err.message, (val) => val),
+      result.fold((err) => err[0].message, (val) => val),
       "john@doe.com",
     );
   });
@@ -21,27 +21,27 @@ describe(email.name, () => {
     const result5 = email("");
 
     assertEquals(
-      result.fold((err) => err.message, (val) => val),
+      result.fold((err) => err[0].message, (val) => val),
       "Not a valid email.",
     );
     assertEquals(
-      result1.fold((err) => err.message, (val) => val),
+      result1.fold((err) => err[0].message, (val) => val),
       "Not a valid email.",
     );
     assertEquals(
-      result2.fold((err) => err.message, (val) => val),
+      result2.fold((err) => err[0].message, (val) => val),
       "Not a valid email.",
     );
     assertEquals(
-      result3.fold((err) => err.message, (val) => val),
+      result3.fold((err) => err[0].message, (val) => val),
       "Not a valid email.",
     );
     assertEquals(
-      result4.fold((err) => err.message, (val) => val),
+      result4.fold((err) => err[0].message, (val) => val),
       "Not a valid email.",
     );
     assertEquals(
-      result5.fold((err) => err.message, (val) => val),
+      result5.fold((err) => err[0].message, (val) => val),
       "Not a valid email.",
     );
   });

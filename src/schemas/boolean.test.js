@@ -19,23 +19,23 @@ describe(boolean.name, () => {
     const bool4 = boolean(() => {});
 
     assertEquals(
-      bool.fold((err) => err.message, (val) => String(val)),
+      bool.fold((err) => err[0].message, (val) => String(val)),
       "Not a boolean.",
     );
     assertEquals(
-      bool1.fold((err) => err.message, (val) => String(val)),
+      bool1.fold((err) => err[0].message, (val) => String(val)),
       "Not a boolean.",
     );
     assertEquals(
-      bool2.fold((err) => err.message, (val) => String(val)),
+      bool2.fold((err) => err[0].message, (val) => String(val)),
       "Not a boolean.",
     );
     assertEquals(
-      bool3.fold((err) => err.message, (val) => String(val)),
+      bool3.fold((err) => err[0].message, (val) => String(val)),
       "Not a boolean.",
     );
     assertEquals(
-      bool4.fold((err) => err.message, (val) => String(val)),
+      bool4.fold((err) => err[0].message, (val) => String(val)),
       "Not a boolean.",
     );
   });

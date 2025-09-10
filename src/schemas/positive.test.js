@@ -19,15 +19,15 @@ describe(positive.name, () => {
     const result2 = positive(-Infinity);
 
     assertEquals(
-      result.fold((err) => err.message, (val) => String(val)),
+      result.fold((err) => err[0].message, (val) => String(val)),
       "Number is not positive.",
     );
     assertEquals(
-      result1.fold((err) => err.message, (val) => String(val)),
+      result1.fold((err) => err[0].message, (val) => String(val)),
       "Number is not positive.",
     );
     assertEquals(
-      result2.fold((err) => err.message, (val) => String(val)),
+      result2.fold((err) => err[0].message, (val) => String(val)),
       "Number is not positive.",
     );
   });
