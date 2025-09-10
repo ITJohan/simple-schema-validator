@@ -51,6 +51,15 @@
     }
   },
   "remote": {
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/index.js": "9928f5b66af706215185b96baf0674816ad5e6064a086ad059eea51067db3eca",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/containers/either.js": "b70cdf7bf9228ef2401e5531f6f2b803ec0a7f3beb38517448a8428ed7b6d046",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/containers/io.js": "23b3b4f1584ac33dda0f2a021b125ed950ad919794f11aae950cb9a476ab2bf5",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/containers/task.js": "08de928e07bbafd4d2fd9167ba755a109654638abf6b2e3586ec078a9feddef4",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/types.js": "9afc2968b8d7c28052e95ba35a8f261579a494448094f0e797433a4e58c4ab42",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/utils/compose.js": "87758b88069d0a2e3e383e1085cf7fba3e0d345980d6f8ccf24caea8f159a4f8",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/utils/curry.js": "c1976b9d117988e75b355394894a87d1769f86fade3df04c523ead430fed1b97",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/utils/pipe.js": "5fd2a43d27ad2c515167673803321b4a68a7faea52f3e4c609515ffa002f3ee7",
+    "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/src/utils/prop.js": "16ebf0a18939dfc750c755232efdcccc231406aa99bcb9f01f17f3467fcb3444",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/664f41f933e497557ebbaa8a76c6fe3ea5205daa/index.js": "68fbf703e12065e702593b94801f2accfce5bafd69d267c4f977d3aeddf267c7",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/664f41f933e497557ebbaa8a76c6fe3ea5205daa/src/containers/either.js": "e907d992a8127c60f934462197199f756863512c0178c19206c54439e683afea",
     "https://raw.githubusercontent.com/ITJohan/simple-functions/664f41f933e497557ebbaa8a76c6fe3ea5205daa/src/utils/compose.js": "87758b88069d0a2e3e383e1085cf7fba3e0d345980d6f8ccf24caea8f159a4f8",

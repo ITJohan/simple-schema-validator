@@ -11,6 +11,6 @@
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.14",
     "@std/testing": "jsr:@std/testing@^1.0.15",
-    "simple-functions": "https://raw.githubusercontent.com/ITJohan/simple-functions/b26af2e/index.js"
+    "simple-functions": "https://raw.githubusercontent.com/ITJohan/simple-functions/210d8b9/index.js"
   }
 }

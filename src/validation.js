@@ -1,4 +1,7 @@
 /** @import { ValidationError } from "./types.js" */
+/** @import { Task } from "simple-functions" */
+
+import { task } from "simple-functions";
 
 /**
  * @template {ValidationError} E
@@ -10,6 +13,7 @@
  * @prop {<B>(other: Validation<E, (x: A) => B>) => Validation<E, B>} ap
  * @prop {<B>(fn: (x: A) => Validation<E, B>) => Validation<E, B>} chain
  * @prop {<B>(onFailure: (errors: E[]) => B, onSuccess: (value: A) => B) => B} fold
+ * @prop {() => Task<E, A>} toTask
  */
 
 /**
@@ -22,6 +26,7 @@
  * @prop {<B>(other: Validation<E, (x: A) => B>) => Validation<E, B>} ap
  * @prop {<B>(fn: (x: A) => Validation<E, B>) => Validation<E, B>} chain
  * @prop {<B>(onFailure: (errors: E[]) => B, onSuccess: (value: A) => B) => B} fold
+ * @prop {() => Task<E[], A>} toTask
  */
 
 /**
@@ -48,6 +53,7 @@ const success = (x) => ({
     return success(other.value(x));
   },
   fold: (_onFailure, onSuccess) => onSuccess(x),
+  toTask: () => task.of(x),
 });
 
 /**
@@ -70,6 +76,7 @@ const failure = (x) => {
     },
     chain: () => instance,
     fold: (onFailure, _onSuccess) => onFailure(x),
+    toTask: () => task.rejected(x),
   };
   return instance;
 };
