@@ -1,3 +1,4 @@
+export * from "./src/types.js";
 export { boolean } from "./src/schemas/boolean.js";
 export { email } from "./src/schemas/email.js";
 export { number } from "./src/schemas/number.js";
