@@ -5,3 +5,11 @@
  * @template A
  * @typedef {A extends Validation<any, infer A> ? A : never} Schema
  */
+
+/**
+ * @typedef {object} ValidationError
+ * @prop {"validation-error"} tag
+ * @prop {string} message
+ * @prop {string} [property]
+ * @prop {any} value
+ */

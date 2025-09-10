@@ -1,4 +1,5 @@
-/** @import { Validation, ValidationError } from "../validation.js" */
+/** @import { ValidationError } from "../types.js" */
+/** @import { Validation } from "../validation.js" */
 
 import { validation } from "../validation.js";
 

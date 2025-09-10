@@ -1,4 +1,5 @@
-/** @import { Validation, ValidationError } from "./validation.js" */
+/** @import { ValidationError } from "./types.js" */
+/** @import { Validation } from "./validation.js" */
 
 import { describe, it } from "@std/testing/bdd";
 import { validation } from "./validation.js";
@@ -9,13 +10,11 @@ import { assertEquals } from "@std/assert";
  * @returns {Validation<ValidationError, number>}
  */
 const validateNum = (num) =>
-  num >= 18
-    ? validation.success(num)
-    : validation.failure([{
-      tag: "validation-error",
-      message: "Too low",
-      value: num,
-    }]);
+  num >= 18 ? validation.success(num) : validation.failure([{
+    tag: "validation-error",
+    message: "Too low",
+    value: num,
+  }]);
 
 describe("validation", () => {
   describe(validation.success.name, () => {
