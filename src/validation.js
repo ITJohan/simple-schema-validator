@@ -1,10 +1,9 @@
-/** @import { ValidationError } from "./types.js" */
 /** @import { Either, Task } from "simple-functions" */
 
 import { either, task } from "simple-functions";
 
 /**
- * @template {ValidationError} E
+ * @template E
  * @template A
  * @typedef {object} Success
  * @prop {"success"} tag
@@ -18,7 +17,7 @@ import { either, task } from "simple-functions";
  */
 
 /**
- * @template {ValidationError} E
+ * @template E
  * @template A
  * @typedef {object} Failure
  * @prop {"failure"} tag
@@ -32,13 +31,13 @@ import { either, task } from "simple-functions";
  */
 
 /**
- * @template {ValidationError} E
+ * @template E
  * @template A
  * @typedef {Success<E, A> | Failure<E, A>} Validation
  */
 
 /**
- * @template {ValidationError} E
+ * @template E
  * @template A
  * @param {A} x
  * @returns {Validation<E, A>}
@@ -60,7 +59,7 @@ const success = (x) => ({
 });
 
 /**
- * @template {ValidationError} E
+ * @template E
  * @template A
  * @param {E[]} x
  * @returns {Validation<E, A>}
@@ -86,7 +85,7 @@ const failure = (x) => {
 };
 
 /**
- * @template {ValidationError} E
+ * @template E
  * @template A
  * @param {A} x
  * @returns {Validation<E, A>}
