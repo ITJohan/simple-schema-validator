@@ -1,42 +1,18 @@
 import { describe, it } from "@std/testing/bdd";
-import { assertEquals } from "@std/assert";
-import { boolean } from "./boolean.js";
+import { assertEquals, assertThrows } from "@std/assert";
+import { BooleanSchema } from "./boolean.js";
 
-describe(boolean.name, () => {
+describe(BooleanSchema.name, () => {
   it("should validate a boolean", () => {
-    const bool = boolean(true);
-    const bool1 = boolean(false);
-
-    assertEquals(bool.fold((err) => Boolean(err), (val) => val), true);
-    assertEquals(bool1.fold((err) => Boolean(err), (val) => val), false);
+    assertEquals(new BooleanSchema().parse(true), true);
+    assertEquals(new BooleanSchema().parse(false), false);
   });
 
   it("should invalidate a non-boolean", () => {
-    const bool = boolean("");
-    const bool1 = boolean(NaN);
-    const bool2 = boolean(0);
-    const bool3 = boolean({});
-    const bool4 = boolean(() => {});
-
-    assertEquals(
-      bool.fold((err) => err[0].message, (val) => String(val)),
-      "Not a boolean.",
-    );
-    assertEquals(
-      bool1.fold((err) => err[0].message, (val) => String(val)),
-      "Not a boolean.",
-    );
-    assertEquals(
-      bool2.fold((err) => err[0].message, (val) => String(val)),
-      "Not a boolean.",
-    );
-    assertEquals(
-      bool3.fold((err) => err[0].message, (val) => String(val)),
-      "Not a boolean.",
-    );
-    assertEquals(
-      bool4.fold((err) => err[0].message, (val) => String(val)),
-      "Not a boolean.",
-    );
+    assertThrows(() => new BooleanSchema().parse(""));
+    assertThrows(() => new BooleanSchema().parse(NaN));
+    assertThrows(() => new BooleanSchema().parse(0));
+    assertThrows(() => new BooleanSchema().parse({}));
+    assertThrows(() => new BooleanSchema().parse(() => {}));
   });
 });

@@ -16,4 +16,18 @@ describe(NumberSchema.name, () => {
     assertThrows(() => new NumberSchema().parse({}));
     assertThrows(() => new NumberSchema().parse(() => {}));
   });
+
+  describe("positive", () => {
+    it("should validate a positive number", () => {
+      assertEquals(new NumberSchema().positive().parse(0.01), 0.01);
+      assertEquals(new NumberSchema().positive().parse(1), 1);
+      assertEquals(new NumberSchema().positive().parse(Infinity), Infinity);
+    });
+
+    it("should invalidate a negative number", () => {
+      assertThrows(() => new NumberSchema().parse(0));
+      assertThrows(() => new NumberSchema().parse(-1));
+      assertThrows(() => new NumberSchema().parse(-Infinity));
+    });
+  });
 });

@@ -14,4 +14,22 @@ describe(StringSchema.name, () => {
     assertThrows(() => new StringSchema().parse({}));
     assertThrows(() => new StringSchema().parse(() => {}));
   });
+
+  describe("email", () => {
+    it("should validate a valid email", () => {
+      assertEquals(
+        new StringSchema().email().parse("john@doe.com"),
+        "john@doe.com",
+      );
+    });
+
+    it("should invalidate an unvalid email", () => {
+      assertThrows(() => new StringSchema().email().parse("john@doe."));
+      assertThrows(() => new StringSchema().email().parse("john@doe"));
+      assertThrows(() => new StringSchema().email().parse("johndoe.com"));
+      assertThrows(() => new StringSchema().email().parse("@doe.com"));
+      assertThrows(() => new StringSchema().email().parse("john"));
+      assertThrows(() => new StringSchema().email().parse(""));
+    });
+  });
 });

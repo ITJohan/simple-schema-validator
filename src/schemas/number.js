@@ -37,6 +37,14 @@ class NumberSchema extends Schema {
       if (x > max) throw new ValidationError({ message: "Too high", value: x });
     }], this.isOptional);
   }
+
+  positive() {
+    return new NumberSchema([...this.rules, (x) => {
+      if (x <= 0) {
+        throw new ValidationError({ message: "Must be positive", value: x });
+      }
+    }], this.isOptional);
+  }
 }
 
 export { NumberSchema };

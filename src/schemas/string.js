@@ -41,6 +41,14 @@ class StringSchema extends Schema {
       }
     }], this.isOptional);
   }
+
+  email() {
+    return new StringSchema([...this.rules, (x) => {
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(x)) {
+        throw new ValidationError({ message: "Not a valid email", value: x });
+      }
+    }], this.isOptional);
+  }
 }
 
 export { StringSchema };

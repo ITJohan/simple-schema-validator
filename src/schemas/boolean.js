@@ -1,19 +1,28 @@
-/** @import { ValidationError } from "../types.js" */
-/** @import { Validation } from "../validation.js" */
+import { ValidationError } from "../errors/validation-error.js";
+import { Schema } from "./schema.js";
 
-import { validation } from "../validation.js";
+/** @extends {Schema<boolean>} */
+class BooleanSchema extends Schema {
+  /**
+   * @param {((x: any) => void)[]} rules
+   * @param {boolean} isOptional
+   */
+  constructor(rules = [], isOptional = false) {
+    super(
+      rules.length > 0 ? rules : [
+        (x) => {
+          if (typeof x !== "boolean") {
+            throw new ValidationError({ message: "Not a boolean", value: x });
+          }
+        },
+      ],
+      isOptional,
+    );
+  }
 
-/**
- * @param {any} x
- * @returns {Validation<ValidationError, boolean>}
- */
-const boolean = (x) =>
-  typeof x !== "boolean"
-    ? validation.failure([{
-      tag: "validation-error",
-      message: "Not a boolean.",
-      value: x,
-    }])
-    : validation.success(x);
+  optional() {
+    return new BooleanSchema(this.rules, true);
+  }
+}
 
-export { boolean };
+export { BooleanSchema };
