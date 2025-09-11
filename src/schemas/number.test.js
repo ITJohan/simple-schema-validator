@@ -1,44 +1,19 @@
 import { describe, it } from "@std/testing/bdd";
-import { assertEquals } from "@std/assert";
-import { number } from "./number.js";
+import { assertEquals, assertThrows } from "@std/assert";
+import { NumberSchema } from "./number.js";
 
-describe(number.name, () => {
+describe(NumberSchema.name, () => {
   it("should validate a number", () => {
-    const num = number(123);
-    const num1 = number(Infinity);
-    const num2 = number(0);
-
-    assertEquals(num.fold((err) => Number(err), (val) => val), 123);
-    assertEquals(num1.fold((err) => Number(err), (val) => val), Infinity);
-    assertEquals(num2.fold((err) => Number(err), (val) => val), 0);
+    assertEquals(new NumberSchema().parse(123), 123);
+    assertEquals(new NumberSchema().parse(Infinity), Infinity);
+    assertEquals(new NumberSchema().parse(0), 0);
   });
 
   it("should invalidate a non-number", () => {
-    const text = number("");
-    const text1 = number(NaN);
-    const text2 = number(true);
-    const text3 = number({});
-    const text4 = number(() => {});
-
-    assertEquals(
-      text.fold((err) => err[0].message, (val) => String(val)),
-      "Not a number.",
-    );
-    assertEquals(
-      text1.fold((err) => err[0].message, (val) => String(val)),
-      "Not a number.",
-    );
-    assertEquals(
-      text2.fold((err) => err[0].message, (val) => String(val)),
-      "Not a number.",
-    );
-    assertEquals(
-      text3.fold((err) => err[0].message, (val) => String(val)),
-      "Not a number.",
-    );
-    assertEquals(
-      text4.fold((err) => err[0].message, (val) => String(val)),
-      "Not a number.",
-    );
+    assertThrows(() => new NumberSchema().parse(""));
+    assertThrows(() => new NumberSchema().parse(NaN));
+    assertThrows(() => new NumberSchema().parse(true));
+    assertThrows(() => new NumberSchema().parse({}));
+    assertThrows(() => new NumberSchema().parse(() => {}));
   });
 });
