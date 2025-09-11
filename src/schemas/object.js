@@ -21,13 +21,10 @@ class ObjectSchema extends Schema {
       if (typeof x !== "object" || x === null || Array.isArray(x)) {
         throw new ValidationError({ message: "Not an object", value: x });
       }
+      return x;
     }], isOptional);
     this.#schema = schema;
     this.#keys = Object.keys(schema);
-  }
-
-  optional() {
-    return new ObjectSchema(this.#schema, true);
   }
 
   /**

@@ -4,7 +4,7 @@ import { Schema } from "./schema.js";
 /** @extends {Schema<number>} */
 class NumberSchema extends Schema {
   /**
-   * @param {((x: any) => void)[]} rules
+   * @param {((x: any) => number)[]} rules
    * @param {boolean} isOptional
    */
   constructor(rules = [], isOptional = false) {
@@ -14,20 +14,18 @@ class NumberSchema extends Schema {
           if (typeof x !== "number" || isNaN(x)) {
             throw new ValidationError({ message: "Not a number", value: x });
           }
+          return x;
         },
       ],
       isOptional,
     );
   }
 
-  optional() {
-    return new NumberSchema(this.rules, true);
-  }
-
   /** @param {number} min */
   min(min) {
     return new NumberSchema([...this.rules, (x) => {
       if (x < min) throw new ValidationError({ message: "Too low", value: x });
+      return x;
     }], this.isOptional);
   }
 
@@ -35,6 +33,7 @@ class NumberSchema extends Schema {
   max(max) {
     return new NumberSchema([...this.rules, (x) => {
       if (x > max) throw new ValidationError({ message: "Too high", value: x });
+      return x;
     }], this.isOptional);
   }
 
@@ -43,6 +42,7 @@ class NumberSchema extends Schema {
       if (x <= 0) {
         throw new ValidationError({ message: "Must be positive", value: x });
       }
+      return x;
     }], this.isOptional);
   }
 }

@@ -4,7 +4,7 @@ import { Schema } from "./schema.js";
 /** @extends {Schema<boolean>} */
 class BooleanSchema extends Schema {
   /**
-   * @param {((x: any) => void)[]} rules
+   * @param {((x: any) => boolean)[]} rules
    * @param {boolean} isOptional
    */
   constructor(rules = [], isOptional = false) {
@@ -14,14 +14,11 @@ class BooleanSchema extends Schema {
           if (typeof x !== "boolean") {
             throw new ValidationError({ message: "Not a boolean", value: x });
           }
+          return x;
         },
       ],
       isOptional,
     );
-  }
-
-  optional() {
-    return new BooleanSchema(this.rules, true);
   }
 }
 

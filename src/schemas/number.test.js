@@ -25,9 +25,10 @@ describe(NumberSchema.name, () => {
     });
 
     it("should invalidate a negative number", () => {
-      assertThrows(() => new NumberSchema().parse(0));
-      assertThrows(() => new NumberSchema().parse(-1));
-      assertThrows(() => new NumberSchema().parse(-Infinity));
+      assertThrows(() => new NumberSchema().positive().parse(0));
+      assertThrows(() => new NumberSchema().positive().parse(-0.01));
+      assertThrows(() => new NumberSchema().positive().parse(-1));
+      assertThrows(() => new NumberSchema().positive().parse(-Infinity));
     });
   });
 });

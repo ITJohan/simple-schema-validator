@@ -1,17 +1,35 @@
 /** @template A */
 class Schema {
-  /** @type {((x: any) => void)[]} */
+  /** @type {((x: any) => A)[]} */
   rules;
   /** @type {boolean} */
   isOptional;
 
   /**
-   * @param {((x: any) => void)[]} rules
+   * @param {((x: any) => A)[]} rules
    * @param {boolean} isOptional
    */
   constructor(rules = [], isOptional = false) {
     this.rules = rules;
     this.isOptional = isOptional;
+  }
+
+  /**
+   * @param {(x: any) => A} fn
+   * @returns {this}
+   */
+  transform(fn) {
+    const subclass = /** @type {typeof Schema} */ (this.constructor);
+    return /** @type {this} */ (
+      new subclass([fn, ...this.rules], this.isOptional)
+    );
+  }
+
+  optional() {
+    const subclass = /** @type {typeof Schema} */ (this.constructor);
+    return /** @type {this} */ (
+      new subclass(this.rules, true)
+    );
   }
 
   /**
@@ -23,11 +41,12 @@ class Schema {
       return x;
     }
 
+    let value = x;
     for (const rule of this.rules) {
-      rule(x);
+      value = rule(value);
     }
 
-    return x;
+    return value;
   }
 }
 

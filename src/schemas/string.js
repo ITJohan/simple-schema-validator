@@ -4,7 +4,7 @@ import { Schema } from "./schema.js";
 /** @extends {Schema<string>} */
 class StringSchema extends Schema {
   /**
-   * @param {((x: any) => void)[]} rules
+   * @param {((x: any) => string)[]} rules
    * @param {boolean} isOptional
    */
   constructor(rules = [], isOptional = false) {
@@ -14,14 +14,11 @@ class StringSchema extends Schema {
           if (typeof x !== "string") {
             throw new ValidationError({ message: "Not a string", value: x });
           }
+          return x;
         },
       ],
       isOptional,
     );
-  }
-
-  optional() {
-    return new StringSchema(this.rules, true);
   }
 
   /** @param {number} min */
@@ -30,6 +27,7 @@ class StringSchema extends Schema {
       if (x.length < min) {
         throw new ValidationError({ message: "Too short", value: x });
       }
+      return x;
     }], this.isOptional);
   }
 
@@ -39,6 +37,7 @@ class StringSchema extends Schema {
       if (x.length > max) {
         throw new ValidationError({ message: "Too long", value: x });
       }
+      return x;
     }], this.isOptional);
   }
 
@@ -47,6 +46,7 @@ class StringSchema extends Schema {
       if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(x)) {
         throw new ValidationError({ message: "Not a valid email", value: x });
       }
+      return x;
     }], this.isOptional);
   }
 }
