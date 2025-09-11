@@ -1,37 +1,17 @@
 import { describe, it } from "@std/testing/bdd";
-import { assertEquals } from "@std/assert";
-import { string } from "./string.js";
+import { assertEquals, assertThrows } from "@std/assert";
+import { StringSchema } from "./string.js";
 
-describe(string.name, () => {
+describe(StringSchema.name, () => {
   it("should validate a string", () => {
-    const text = string("abc");
-    const text1 = string("");
-
-    assertEquals(text.fold((err) => err[0].message, (val) => val), "abc");
-    assertEquals(text1.fold((err) => err[0].message, (val) => val), "");
+    assertEquals(new StringSchema().parse("abc"), "abc");
+    assertEquals(new StringSchema().parse(""), "");
   });
 
-  it("should invalidate a non-string", () => {
-    const text = string(1);
-    const text1 = string(true);
-    const text2 = string({});
-    const text3 = string(() => {});
-
-    assertEquals(
-      text.fold((err) => err[0].message, (val) => val),
-      "Not a string.",
-    );
-    assertEquals(
-      text1.fold((err) => err[0].message, (val) => val),
-      "Not a string.",
-    );
-    assertEquals(
-      text2.fold((err) => err[0].message, (val) => val),
-      "Not a string.",
-    );
-    assertEquals(
-      text3.fold((err) => err[0].message, (val) => val),
-      "Not a string.",
-    );
+  it("should invalidate a non-new StringSchema", () => {
+    assertThrows(() => new StringSchema().parse(1));
+    assertThrows(() => new StringSchema().parse(true));
+    assertThrows(() => new StringSchema().parse({}));
+    assertThrows(() => new StringSchema().parse(() => {}));
   });
 });

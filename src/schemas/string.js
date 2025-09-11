@@ -1,19 +1,39 @@
-/** @import { ValidationError } from "../types.js" */
-/** @import { Validation } from "../validation.js" */
+import { Schema } from "./schema.js";
 
-import { validation } from "../validation.js";
+/** @extends {Schema<string>} */
+class StringSchema extends Schema {
+  /**
+   * @param {((x: any) => void)[]} rules
+   * @param {boolean} isOptional
+   */
+  constructor(rules = [], isOptional = false) {
+    super(
+      rules.length > 0 ? rules : [
+        (x) => {
+          if (typeof x !== "string") throw new Error("Not a string");
+        },
+      ],
+      isOptional,
+    );
+  }
 
-/**
- * @param {any} x
- * @returns {Validation<ValidationError, string>}
- */
-const string = (x) =>
-  typeof x !== "string"
-    ? validation.failure([{
-      tag: "validation-error",
-      message: "Not a string.",
-      value: x,
-    }])
-    : validation.success(x);
+  optional() {
+    return new StringSchema(this.rules, true);
+  }
 
-export { string };
+  /** @param {number} min */
+  minLength(min) {
+    return new StringSchema([...this.rules, (x) => {
+      if (x.length < min) throw new Error("Too short");
+    }], this.isOptional);
+  }
+
+  /** @param {number} max */
+  maxLength(max) {
+    return new StringSchema([...this.rules, (x) => {
+      if (x.length > max) throw new Error("Too long");
+    }], this.isOptional);
+  }
+}
+
+export { StringSchema };
