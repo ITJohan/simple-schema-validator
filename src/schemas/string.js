@@ -1,3 +1,4 @@
+import { ValidationError } from "../errors/validation-error.js";
 import { Schema } from "./schema.js";
 
 /** @extends {Schema<string>} */
@@ -10,7 +11,9 @@ class StringSchema extends Schema {
     super(
       rules.length > 0 ? rules : [
         (x) => {
-          if (typeof x !== "string") throw new Error("Not a string");
+          if (typeof x !== "string") {
+            throw new ValidationError({ message: "Not a string", value: x });
+          }
         },
       ],
       isOptional,
@@ -24,14 +27,18 @@ class StringSchema extends Schema {
   /** @param {number} min */
   minLength(min) {
     return new StringSchema([...this.rules, (x) => {
-      if (x.length < min) throw new Error("Too short");
+      if (x.length < min) {
+        throw new ValidationError({ message: "Too short", value: x });
+      }
     }], this.isOptional);
   }
 
   /** @param {number} max */
   maxLength(max) {
     return new StringSchema([...this.rules, (x) => {
-      if (x.length > max) throw new Error("Too long");
+      if (x.length > max) {
+        throw new ValidationError({ message: "Too long", value: x });
+      }
     }], this.isOptional);
   }
 }

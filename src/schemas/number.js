@@ -1,3 +1,4 @@
+import { ValidationError } from "../errors/validation-error.js";
 import { Schema } from "./schema.js";
 
 /** @extends {Schema<number>} */
@@ -11,7 +12,7 @@ class NumberSchema extends Schema {
       rules.length > 0 ? rules : [
         (x) => {
           if (typeof x !== "number" || isNaN(x)) {
-            throw new Error("Not a number");
+            throw new ValidationError({ message: "Not a number", value: x });
           }
         },
       ],
@@ -26,14 +27,14 @@ class NumberSchema extends Schema {
   /** @param {number} min */
   min(min) {
     return new NumberSchema([...this.rules, (x) => {
-      if (x < min) throw new Error("Too low");
+      if (x < min) throw new ValidationError({ message: "Too low", value: x });
     }], this.isOptional);
   }
 
   /** @param {number} max */
   max(max) {
     return new NumberSchema([...this.rules, (x) => {
-      if (x > max) throw new Error("Too high");
+      if (x > max) throw new ValidationError({ message: "Too high", value: x });
     }], this.isOptional);
   }
 }
