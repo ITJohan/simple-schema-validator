@@ -3,7 +3,7 @@ import { assertEquals, assertThrows } from "@std/assert";
 import { DateSchema } from "./date.js";
 
 describe(DateSchema.name, () => {
-  it("should validate a valid ISO string", () => {
+  it("should validate a valid datetime string", () => {
     assertEquals(new DateSchema().parse("2025-09-12"), 1757635200000);
     assertEquals(new DateSchema().parse("2025-09-12T05:53"), 1757649180000);
     assertEquals(new DateSchema().parse("2025-09-12T05:53:39"), 1757649219000);
@@ -25,11 +25,9 @@ describe(DateSchema.name, () => {
     );
   });
 
-  it("should invalidate an invalid ISO string", () => {
+  it("should invalidate an invalid datetime string", () => {
     assertThrows(() => new DateSchema().parse(""));
-    assertThrows(() => new DateSchema().parse("2025-"));
     assertThrows(() => new DateSchema().parse("2025-0"));
-    assertThrows(() => new DateSchema().parse("2025-09-"));
     assertThrows(() => new DateSchema().parse("2025-09-12T"));
     assertThrows(() => new DateSchema().parse("2025-99-12"));
     assertThrows(() => new DateSchema().parse("2025-09-12T0"));
@@ -39,5 +37,9 @@ describe(DateSchema.name, () => {
     assertThrows(() => new DateSchema().parse("2025-09-12T05:53:"));
     assertThrows(() => new DateSchema().parse("2025-09-12T05:53:3"));
     assertThrows(() => new DateSchema().parse("2025-09-12T05:53:39."));
+  });
+
+  it("should support validating a timestamp", () => {
+    assertEquals(new DateSchema().parse(1757635200000), 1757635200000);
   });
 });

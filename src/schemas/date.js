@@ -11,13 +11,14 @@ class DateSchema extends Schema {
     super(
       rules.length > 0 ? rules : [
         (x) => {
-          if (isNaN(new Date(x).getTime())) {
+          const timestamp = new Date(x).getTime();
+          if (isNaN(timestamp)) {
             throw new ValidationError({
               message: "Not a valid datetime string",
               value: x,
             });
           }
-          return x;
+          return timestamp;
         },
       ],
       isOptional,
