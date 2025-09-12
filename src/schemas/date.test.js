@@ -42,4 +42,8 @@ describe(DateSchema.name, () => {
   it("should support validating a timestamp", () => {
     assertEquals(new DateSchema().parse(1757635200000), 1757635200000);
   });
+
+  it("should invalidate an invalid timestamp", () => {
+    assertThrows(() => new DateSchema().parse(-1));
+  });
 });

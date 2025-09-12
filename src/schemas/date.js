@@ -12,7 +12,7 @@ class DateSchema extends Schema {
       rules.length > 0 ? rules : [
         (x) => {
           const timestamp = new Date(x).getTime();
-          if (isNaN(timestamp)) {
+          if (isNaN(timestamp) || timestamp < 0) {
             throw new ValidationError({
               message: "Not a valid datetime string",
               value: x,
