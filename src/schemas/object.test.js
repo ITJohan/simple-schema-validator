@@ -4,6 +4,8 @@ import { ObjectSchema } from "./object.js";
 import { StringSchema } from "./string.js";
 import { NumberSchema } from "./number.js";
 import { AggregateValidationError } from "../errors/aggregate-validaton-error.js";
+import { DateSchema } from "./date.js";
+import { ValidationError } from "../errors/validation-error.js";
 
 describe(ObjectSchema.name, () => {
   it("should return a valid object given a valid schema", () => {
@@ -47,5 +49,21 @@ describe(ObjectSchema.name, () => {
         assertEquals(error.errors.length, 2);
       }
     }
+  });
+
+  it("should have a refine method that gets the parsed object and defines object-level validations", () => {
+    const booking = new ObjectSchema({
+      from: new DateSchema(),
+      to: new DateSchema(),
+    }).refine((booking) => {
+      if (booking.to < booking.from) {
+        throw new ValidationError({
+          message: "To can not be less than from",
+          value: booking,
+        });
+      }
+    });
+
+    assertThrows(() => booking.parse({ from: 2, to: 1 }));
   });
 });

@@ -11,12 +11,15 @@ class ObjectSchema extends Schema {
   #schema;
   /** @type {Array<keyof S>} */
   #keys;
+  /** @type {Array<(data: S) => void>} */
+  #refinements;
 
   /**
    * @param {S} schema
    * @param {boolean} isOptional
+   * @param {Array<(data: any) => void>} refinements
    */
-  constructor(schema, isOptional = false) {
+  constructor(schema, isOptional = false, refinements = []) {
     super([(x) => {
       if (typeof x !== "object" || x === null || Array.isArray(x)) {
         throw new ValidationError({ message: "Not an object", value: x });
@@ -25,6 +28,18 @@ class ObjectSchema extends Schema {
     }], isOptional);
     this.#schema = schema;
     this.#keys = Object.keys(schema);
+    this.#refinements = refinements;
+  }
+
+  /**
+   * @param {(data: { [K in keyof S]: S[K] extends Schema<infer T> ? T : never }) => void} fn
+   * @returns {this}
+   */
+  refine(fn) {
+    const subclass = /** @type {typeof ObjectSchema} */ (this.constructor);
+    return /** @type {this} */ (
+      new subclass(this.#schema, this.isOptional, [...this.#refinements, fn])
+    );
   }
 
   /**
@@ -57,6 +72,22 @@ class ObjectSchema extends Schema {
               options: { cause: error },
             }),
           );
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    if (errors.length > 0) {
+      throw new AggregateValidationError(errors);
+    }
+
+    for (const refinement of this.#refinements) {
+      try {
+        refinement(result);
+      } catch (error) {
+        if (error instanceof ValidationError) {
+          errors.push(error);
         } else {
           throw error;
         }
