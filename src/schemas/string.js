@@ -23,31 +23,31 @@ class StringSchema extends Schema {
 
   /** @param {number} min */
   minLength(min) {
-    return new StringSchema([...this.rules, (x) => {
+    return /** @type {this} */ (new StringSchema([...this.rules, (x) => {
       if (x.length < min) {
         throw new ValidationError({ message: "Too short", value: x });
       }
       return x;
-    }], this.isOptional);
+    }], this.isOptional));
   }
 
   /** @param {number} max */
   maxLength(max) {
-    return new StringSchema([...this.rules, (x) => {
+    return /** @type {this} */ (new StringSchema([...this.rules, (x) => {
       if (x.length > max) {
         throw new ValidationError({ message: "Too long", value: x });
       }
       return x;
-    }], this.isOptional);
+    }], this.isOptional));
   }
 
   email() {
-    return new StringSchema([...this.rules, (x) => {
+    return /** @type {this} */ (new StringSchema([...this.rules, (x) => {
       if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(x)) {
         throw new ValidationError({ message: "Not a valid email", value: x });
       }
       return x;
-    }], this.isOptional);
+    }], this.isOptional));
   }
 }
 

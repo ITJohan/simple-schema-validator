@@ -23,27 +23,27 @@ class NumberSchema extends Schema {
 
   /** @param {number} min */
   min(min) {
-    return new NumberSchema([...this.rules, (x) => {
+    return /** @type {this} */ (new NumberSchema([...this.rules, (x) => {
       if (x < min) throw new ValidationError({ message: "Too low", value: x });
       return x;
-    }], this.isOptional);
+    }], this.isOptional));
   }
 
   /** @param {number} max */
   max(max) {
-    return new NumberSchema([...this.rules, (x) => {
+    return /** @type {this} */ (new NumberSchema([...this.rules, (x) => {
       if (x > max) throw new ValidationError({ message: "Too high", value: x });
       return x;
-    }], this.isOptional);
+    }], this.isOptional));
   }
 
   positive() {
-    return new NumberSchema([...this.rules, (x) => {
+    return /** @type {this} */ (new NumberSchema([...this.rules, (x) => {
       if (x <= 0) {
         throw new ValidationError({ message: "Must be positive", value: x });
       }
       return x;
-    }], this.isOptional);
+    }], this.isOptional));
   }
 }
 

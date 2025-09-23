@@ -25,16 +25,17 @@ class Schema {
     );
   }
 
+  /** @returns {this & { isOptional: true }} */
   optional() {
     const subclass = /** @type {typeof Schema} */ (this.constructor);
-    return /** @type {this} */ (
+    return /** @type {this & { isOptional: true }} */ (
       new subclass(this.rules, true)
     );
   }
 
   /**
    * @param {any} x
-   * @returns {A}
+   * @returns {this extends { isOptional: true } ? A | undefined | null : A}
    */
   parse(x) {
     if (this.isOptional && (x === null || x === undefined)) {
