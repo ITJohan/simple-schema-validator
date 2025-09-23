@@ -14,6 +14,10 @@ class ObjectSchema extends Schema {
   /** @type {Array<(data: S) => void>} */
   #refinements;
 
+  get shape() {
+    return this.#schema;
+  }
+
   /**
    * @param {S} schema
    * @param {boolean} isOptional
