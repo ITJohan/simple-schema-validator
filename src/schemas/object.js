@@ -7,103 +7,108 @@ import { Schema } from "./schema.js";
  * @extends {Schema<{ [K in keyof S]: any }>}
  */
 class ObjectSchema extends Schema {
-  /** @param {S} schema */
-  #schema;
-  /** @type {Array<keyof S>} */
-  #keys;
-  /** @type {Array<(data: S) => void>} */
-  #refinements;
+	/** @param {S} schema */
+	#schema;
+	/** @type {Array<keyof S>} */
+	#keys;
+	/** @type {Array<(data: S) => void>} */
+	#refinements;
 
-  get shape() {
-    return this.#schema;
-  }
+	get shape() {
+		return this.#schema;
+	}
 
-  /**
-   * @param {S} schema
-   * @param {boolean} isOptional
-   * @param {Array<(data: any) => void>} refinements
-   */
-  constructor(schema, isOptional = false, refinements = []) {
-    super([(x) => {
-      if (typeof x !== "object" || x === null || Array.isArray(x)) {
-        throw new ValidationError({ message: "Not an object", value: x });
-      }
-      return x;
-    }], isOptional);
-    this.#schema = schema;
-    this.#keys = Object.keys(schema);
-    this.#refinements = refinements;
-  }
+	/**
+	 * @param {S} schema
+	 * @param {boolean} isOptional
+	 * @param {Array<(data: any) => void>} refinements
+	 */
+	constructor(schema, isOptional = false, refinements = []) {
+		super(
+			[
+				(x) => {
+					if (typeof x !== "object" || x === null || Array.isArray(x)) {
+						throw new ValidationError({ message: "Not an object", value: x });
+					}
+					return x;
+				},
+			],
+			isOptional,
+		);
+		this.#schema = schema;
+		this.#keys = Object.keys(schema);
+		this.#refinements = refinements;
+	}
 
-  /**
-   * @param {(data: { [K in keyof S]: S[K] extends Schema<infer T> ? T : never }) => void} fn
-   * @returns {this}
-   */
-  refine(fn) {
-    const subclass = /** @type {typeof ObjectSchema} */ (this.constructor);
-    return /** @type {this} */ (
-      new subclass(this.#schema, this.isOptional, [...this.#refinements, fn])
-    );
-  }
+	/**
+	 * @param {(data: { [K in keyof S]: S[K] extends Schema<infer T> ? T : never }) => void} fn
+	 * @returns {this}
+	 */
+	refine(fn) {
+		const subclass = /** @type {typeof ObjectSchema} */ (this.constructor);
+		return /** @type {this} */ (
+			new subclass(this.#schema, this.isOptional, [...this.#refinements, fn])
+		);
+	}
 
-  /**
-   * @override
-   * @param {any} x
-   * @returns {{ [K in keyof S]: S[K] extends Schema<infer T> ? T : never }}
-   * @throws {AggregateValidationError}
-   */
-  parse(x) {
-    super.parse(x);
+	/**
+	 * @override
+	 * @param {any} x
+	 * @returns {{ [K in keyof S]: S[K] extends Schema<infer T> ? T : never }}
+	 * @throws {AggregateValidationError}
+	 */
+	parse(x) {
+		super.parse(x);
 
-    /** @type {any} */
-    const result = {};
-    /** @type {ValidationError[]} */
-    const errors = [];
+		/** @type {any} */
+		const result = {};
+		/** @type {ValidationError[]} */
+		const errors = [];
 
-    for (const key of this.#keys) {
-      const validator = this.#schema[key];
-      const value = x[key];
+		for (const key of this.#keys) {
+			const validator = this.#schema[key];
+			const value = x[key];
 
-      try {
-        const parsedValue = validator.parse(value);
-        result[key] = parsedValue;
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          errors.push(
-            new ValidationError({
-              ...error,
-              key: String(key),
-              options: { cause: error },
-            }),
-          );
-        } else {
-          throw error;
-        }
-      }
-    }
+			try {
+				const parsedValue = validator.parse(value);
+				result[key] = parsedValue;
+			} catch (error) {
+				if (error instanceof ValidationError) {
+					errors.push(
+						new ValidationError({
+							...error,
+							key: String(key),
+							options: { cause: error },
+						}),
+					);
+				} else {
+					throw error;
+				}
+			}
+		}
 
-    if (errors.length > 0) {
-      throw new AggregateValidationError(errors);
-    }
+		if (errors.length > 0) {
+			throw new AggregateValidationError(errors);
+		}
 
-    for (const refinement of this.#refinements) {
-      try {
-        refinement(result);
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          errors.push(error);
-        } else {
-          throw error;
-        }
-      }
-    }
+		for (const refinement of this.#refinements) {
+			try {
+				refinement(result);
+			} catch (error) {
+				if (error instanceof ValidationError) {
+					errors.push(error);
+				} else {
+					throw error;
+				}
+			}
+		}
 
-    if (errors.length > 0) {
-      throw new AggregateValidationError(errors);
-    }
+		if (errors.length > 0) {
+			throw new AggregateValidationError(errors);
+		}
 
-    return result;
-  }
+		return result;
+	}
 }
 
 export { ObjectSchema };

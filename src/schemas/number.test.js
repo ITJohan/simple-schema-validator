@@ -1,34 +1,34 @@
-import { describe, it } from "@std/testing/bdd";
-import { assertEquals, assertThrows } from "@std/assert";
+import { deepEqual, throws } from "node:assert";
+import { describe, it } from "node:test";
 import { NumberSchema } from "./number.js";
 
 describe(NumberSchema.name, () => {
-  it("should validate a number", () => {
-    assertEquals(new NumberSchema().parse(123), 123);
-    assertEquals(new NumberSchema().parse(Infinity), Infinity);
-    assertEquals(new NumberSchema().parse(0), 0);
-  });
+	it("should validate a number", () => {
+		deepEqual(new NumberSchema().parse(123), 123);
+		deepEqual(new NumberSchema().parse(Infinity), Infinity);
+		deepEqual(new NumberSchema().parse(0), 0);
+	});
 
-  it("should invalidate a non-number", () => {
-    assertThrows(() => new NumberSchema().parse(""));
-    assertThrows(() => new NumberSchema().parse(NaN));
-    assertThrows(() => new NumberSchema().parse(true));
-    assertThrows(() => new NumberSchema().parse({}));
-    assertThrows(() => new NumberSchema().parse(() => {}));
-  });
+	it("should invalidate a non-number", () => {
+		throws(() => new NumberSchema().parse(""));
+		throws(() => new NumberSchema().parse(NaN));
+		throws(() => new NumberSchema().parse(true));
+		throws(() => new NumberSchema().parse({}));
+		throws(() => new NumberSchema().parse(() => {}));
+	});
 
-  describe("positive", () => {
-    it("should validate a positive number", () => {
-      assertEquals(new NumberSchema().positive().parse(0.01), 0.01);
-      assertEquals(new NumberSchema().positive().parse(1), 1);
-      assertEquals(new NumberSchema().positive().parse(Infinity), Infinity);
-    });
+	describe("positive", () => {
+		it("should validate a positive number", () => {
+			deepEqual(new NumberSchema().positive().parse(0.01), 0.01);
+			deepEqual(new NumberSchema().positive().parse(1), 1);
+			deepEqual(new NumberSchema().positive().parse(Infinity), Infinity);
+		});
 
-    it("should invalidate a negative number", () => {
-      assertThrows(() => new NumberSchema().positive().parse(0));
-      assertThrows(() => new NumberSchema().positive().parse(-0.01));
-      assertThrows(() => new NumberSchema().positive().parse(-1));
-      assertThrows(() => new NumberSchema().positive().parse(-Infinity));
-    });
-  });
+		it("should invalidate a negative number", () => {
+			throws(() => new NumberSchema().positive().parse(0));
+			throws(() => new NumberSchema().positive().parse(-0.01));
+			throws(() => new NumberSchema().positive().parse(-1));
+			throws(() => new NumberSchema().positive().parse(-Infinity));
+		});
+	});
 });

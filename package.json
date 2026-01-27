@@ -1,0 +1,22 @@
+{
+	"name": "simple-schema-validator",
+	"version": "1.0.0",
+	"description": "Functional schema validator with type inference, written in JavaScript with JSDoc.",
+	"main": "index.js",
+	"scripts": {
+		"test": "node --test",
+		"fix": "npx @biomejs/biome check --fix"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ITJohan/simple-schema-validator.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"bugs": {
+		"url": "https://github.com/ITJohan/simple-schema-validator/issues"
+	},
+	"homepage": "https://github.com/ITJohan/simple-schema-validator#readme"
+}
