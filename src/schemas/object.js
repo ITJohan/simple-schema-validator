@@ -4,7 +4,7 @@ import { Schema } from "./schema.js";
 
 /**
  * @template {Record<string, Schema<any>>} S
- * @extends {Schema<{ [K in keyof S]: any }>}
+ * @extends {Schema<{ [K in keyof S]: S[K] extends Schema<infer T> ? T : never }>}
  */
 class ObjectSchema extends Schema {
 	/** @param {S} schema */
