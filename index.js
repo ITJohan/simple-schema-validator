@@ -1,5 +1,3 @@
-export { AggregateValidationError } from "./src/errors/aggregate-validaton-error.js";
-export { ValidationError } from "./src/errors/validation-error.js";
 export { BooleanSchema } from "./src/schemas/boolean.js";
 export { DateSchema } from "./src/schemas/date.js";
 export { number } from "./src/schemas/number.js";
