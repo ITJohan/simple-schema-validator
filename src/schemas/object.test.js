@@ -1,69 +1,73 @@
-import { deepEqual, throws } from "node:assert";
+import { deepStrictEqual } from "node:assert";
 import { describe, it } from "node:test";
-import { AggregateValidationError } from "../errors/aggregate-validaton-error.js";
-import { ValidationError } from "../errors/validation-error.js";
-import { DateSchema } from "./date.js";
-import { NumberSchema } from "./number.js";
-import { ObjectSchema } from "./object.js";
-import { StringSchema } from "./string.js";
+import { object } from "./object.js";
+import { string } from "./string.js";
 
-describe(ObjectSchema.name, () => {
-	it("should return a valid object given a valid schema", () => {
-		const user = new ObjectSchema({
-			id: new NumberSchema(),
-			name: new StringSchema(),
+describe(object.name, () => {
+	it("should return a valid data object given a valid schema", () => {
+		const userSchema = object({
+			name: string(),
 		});
-		const validUser = { id: 1, name: "John" };
-		const result = user.parse(validUser);
-		deepEqual(result, validUser);
+		const validUser = { name: "John" };
+		const expected = {
+			data: {name: 'John'},
+			errors: {name: undefined}
+		};
+		const result = userSchema.parse(validUser);
+		deepStrictEqual(result, expected);
 	});
 
-	it("should throw given a invalid schema", () => {
-		const user = new ObjectSchema({
-			id: new NumberSchema(),
-			name: new StringSchema(),
+	it("should return a object with partial data and errors given invalid input of the same type", () => {
+		const userSchema = object({
+			name: string().min(3, {message: "Too short"}),
 		});
-		const invalidUser = { id: "John", name: 1 };
-		throws(() => user.parse(invalidUser));
+		const validUser = { name: "Jo" };
+		const expected = {
+			data: {name: 'Jo'},
+			errors: {name: ["Too short"]}
+		};
+		const result = userSchema.parse(validUser);
+		deepStrictEqual(result, expected);
 	});
 
-	it("should throw given a invalid schema with chained validators", () => {
-		const user = new ObjectSchema({
-			id: new NumberSchema().min(0),
-			name: new StringSchema(),
+	it("should return a object with fallback data and errors given input of a different type", () => {
+		const userSchema = object({
+			name: string({fallback: "Wrong!", message: "Not a string"}),
 		});
-		const invalidUser = { id: -1, name: "John" };
-		throws(() => user.parse(invalidUser));
+		const user = { name: 1 };
+		const expected = {
+			data: {name: "Wrong!"},
+			errors: {name: ["Not a string"]}
+		};
+		const result = userSchema.parse(user);
+		deepStrictEqual(result, expected);
 	});
 
-	it("should throw aggregate validation error given multiple invalidations", () => {
-		const user = new ObjectSchema({
-			id: new NumberSchema().min(0),
-			name: new StringSchema().minLength(5),
+	it("should return a object with data given input with multiple properties", () => {
+		const userSchema = object({
+			name: string(),
+			hobby: string()
 		});
-		const invalidUser = { id: -1, name: "John" };
-		try {
-			user.parse(invalidUser);
-		} catch (error) {
-			if (error instanceof AggregateValidationError) {
-				deepEqual(error.errors.length, 2);
-			}
-		}
+		const user = { name: "John Doe", hobby: "Biking" };
+		const expected = {
+			data: {name: "John Doe", hobby: "Biking"},
+			errors: {name: undefined, hobby: undefined}
+		};
+		const result = userSchema.parse(user);
+		deepStrictEqual(result, expected);
 	});
 
-	it("should have a refine method that gets the parsed object and defines object-level validations", () => {
-		const booking = new ObjectSchema({
-			from: new DateSchema(),
-			to: new DateSchema(),
-		}).refine((booking) => {
-			if (booking.to < booking.from) {
-				throw new ValidationError({
-					message: "To can not be less than from",
-					value: booking,
-				});
-			}
+	it("should return a object with partial data and errors given input with multiple properties", () => {
+		const userSchema = object({
+			name: string().min(3, {message: "Too short"}),
+			hobby: string()
 		});
-
-		throws(() => booking.parse({ from: 2, to: 1 }));
+		const user = { name: "Jo", hobby: "Biking" };
+		const expected = {
+			data: {name: "Jo", hobby: "Biking"},
+			errors: {name: ["Too short"], hobby: undefined}
+		};
+		const result = userSchema.parse(user);
+		deepStrictEqual(result, expected);
 	});
 });

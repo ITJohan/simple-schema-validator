@@ -7,18 +7,9 @@ describe(DateSchema.name, () => {
 		deepEqual(new DateSchema().parse("2025-09-12"), 1757635200000);
 		deepEqual(new DateSchema().parse("2025-09-12T05:53"), 1757649180000);
 		deepEqual(new DateSchema().parse("2025-09-12T05:53:39"), 1757649219000);
-		deepEqual(
-			new DateSchema().parse("2025-09-12T05:53:39.1"),
-			1757649219100,
-		);
-		deepEqual(
-			new DateSchema().parse("2025-09-12T05:53:39.12"),
-			1757649219120,
-		);
-		deepEqual(
-			new DateSchema().parse("2025-09-12T05:53:39.123"),
-			1757649219123,
-		);
+		deepEqual(new DateSchema().parse("2025-09-12T05:53:39.1"), 1757649219100);
+		deepEqual(new DateSchema().parse("2025-09-12T05:53:39.12"), 1757649219120);
+		deepEqual(new DateSchema().parse("2025-09-12T05:53:39.123"), 1757649219123);
 		deepEqual(
 			new DateSchema().parse("2025-09-12T05:53:39.123Z"),
 			1757656419123,

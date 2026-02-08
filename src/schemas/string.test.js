@@ -11,15 +11,15 @@ describe(string.name, () => {
 	});
 
 	it("should invalidate a non-string", () => {
-		deepStrictEqual(string().parse(1).data, 1);
+		deepStrictEqual(string().parse(1).data, "");
 		deepStrictEqual(string({ message: "Not a string" }).parse(1).errors, [
 			"Not a string",
 		]);
-		deepStrictEqual(string().parse(true).data, true);
+		deepStrictEqual(string().parse(true).data, "");
 		deepStrictEqual(string({ message: "Not a string" }).parse(true).errors, [
 			"Not a string",
 		]);
-		deepStrictEqual(string().parse({}).data, {});
+		deepStrictEqual(string().parse({}).data, "");
 		deepStrictEqual(string({ message: "Not a string" }).parse({}).errors, [
 			"Not a string",
 		]);
@@ -69,7 +69,10 @@ describe(string.name, () => {
 				string().email({ message: "Not an email" }).parse("john@doe").errors,
 				["Not an email"],
 			);
-			deepStrictEqual(string().email().parse("johndoe.com").data, "johndoe.com");
+			deepStrictEqual(
+				string().email().parse("johndoe.com").data,
+				"johndoe.com",
+			);
 			deepStrictEqual(
 				string().email({ message: "Not an email" }).parse("johndoe.com").errors,
 				["Not an email"],

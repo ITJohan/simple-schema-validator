@@ -1,8 +1,9 @@
 /**
  * @param {object} [options]
- * @param {string} options.message
+ * @param {string} [options.fallback]
+ * @param {string} [options.message]
  */
-export const string = ({ message } = { message: "Not a string" }) => {
+export const string = ({ fallback = "", message = "Not a string" } = {}) => {
 	/** @type {((x: string) => string | undefined)[]} */
 	const checks = [];
 
@@ -34,20 +35,30 @@ export const string = ({ message } = { message: "Not a string" }) => {
 		},
 		/**
 		 * @param {unknown} x
+		 * @returns {{
+		 * 	data: string;
+		 * 	errors?: string[];
+		 * }}
 		 */
 		parse: (x) => {
-			if (typeof x !== "string") return { data: x, errors: [message] };
-
 			/** @type {string[]} */
 			const errors = [];
+			let data;
+
+			if (typeof x !== "string") {
+				data = fallback;
+				errors.push(message);
+			} else {
+				data = x;
+			}
 
 			for (const check of checks) {
-				const error = check(x);
+				const error = check(data);
 				if (error) errors.push(error);
 			}
 
-			if (errors.length > 0) return { data: x, errors };
-			return { data: x, errors: undefined };
+			if (errors.length > 0) return { data, errors };
+			return { data };
 		},
 	};
 

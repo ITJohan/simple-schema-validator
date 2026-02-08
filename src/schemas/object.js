@@ -1,114 +1,35 @@
-import { AggregateValidationError } from "../errors/aggregate-validaton-error.js";
-import { ValidationError } from "../errors/validation-error.js";
-import { Schema } from "./schema.js";
+/** @import { string } from './string.js' */
 
 /**
- * @template {Record<string, Schema<any>>} S
- * @extends {Schema<{ [K in keyof S]: S[K] extends Schema<infer T> ? T : never }>}
+ * @template {Record<string, ReturnType<typeof string>>} S
+ * @param {S} shape
+ * @param {object} [options]
+ * @param {string} [options.message]
  */
-class ObjectSchema extends Schema {
-	/** @param {S} schema */
-	#schema;
-	/** @type {Array<keyof S>} */
-	#keys;
-	/** @type {Array<(data: S) => void>} */
-	#refinements;
+export const object = (shape) => {
+  const keys = /** @type {(keyof S)[]} */ (Object.keys(shape))
 
-	get shape() {
-		return this.#schema;
-	}
+	const schema = {
+		/**
+		 * @param {unknown} x
+		 */
+		parse: (x) => {
+      const isObject = x !== null && typeof x === 'object' && !Array.isArray(x);
+      const input = /** @type {Record<keyof S, unknown>} */ (isObject ? x : {});
 
-	/**
-	 * @param {S} schema
-	 * @param {boolean} isOptional
-	 * @param {Array<(data: any) => void>} refinements
-	 */
-	constructor(schema, isOptional = false, refinements = []) {
-		super(
-			[
-				(x) => {
-					if (typeof x !== "object" || x === null || Array.isArray(x)) {
-						throw new ValidationError({ message: "Not an object", value: x });
-					}
-					return x;
-				},
-			],
-			isOptional,
-		);
-		this.#schema = schema;
-		this.#keys = Object.keys(schema);
-		this.#refinements = refinements;
-	}
+      return keys.reduce((acc, key) => {
+        const parsedProperty = shape[key].parse(input[key]);
 
-	/**
-	 * @param {(data: { [K in keyof S]: S[K] extends Schema<infer T> ? T : never }) => void} fn
-	 * @returns {this}
-	 */
-	refine(fn) {
-		const subclass = /** @type {typeof ObjectSchema} */ (this.constructor);
-		return /** @type {this} */ (
-			new subclass(this.#schema, this.isOptional, [...this.#refinements, fn])
-		);
-	}
+        acc.data[key] = parsedProperty.data;
+        acc.errors[key] = parsedProperty.errors;
 
-	/**
-	 * @override
-	 * @param {any} x
-	 * @returns {{ [K in keyof S]: S[K] extends Schema<infer T> ? T : never }}
-	 * @throws {AggregateValidationError}
-	 */
-	parse(x) {
-		super.parse(x);
+        return acc;
+      }, { 
+        data: /** @type {{ [K in keyof S]: ReturnType<S[K]["parse"]>["data"] }} */ ({}), 
+        errors: /** @type {{ [K in keyof S]: string[] | undefined }} */ ({}) 
+      })
+		},
+	};
 
-		/** @type {any} */
-		const result = {};
-		/** @type {ValidationError[]} */
-		const errors = [];
-
-		for (const key of this.#keys) {
-			const validator = this.#schema[key];
-			const value = x[key];
-
-			try {
-				const parsedValue = validator.parse(value);
-				result[key] = parsedValue;
-			} catch (error) {
-				if (error instanceof ValidationError) {
-					errors.push(
-						new ValidationError({
-							...error,
-							key: String(key),
-							options: { cause: error },
-						}),
-					);
-				} else {
-					throw error;
-				}
-			}
-		}
-
-		if (errors.length > 0) {
-			throw new AggregateValidationError(errors);
-		}
-
-		for (const refinement of this.#refinements) {
-			try {
-				refinement(result);
-			} catch (error) {
-				if (error instanceof ValidationError) {
-					errors.push(error);
-				} else {
-					throw error;
-				}
-			}
-		}
-
-		if (errors.length > 0) {
-			throw new AggregateValidationError(errors);
-		}
-
-		return result;
-	}
-}
-
-export { ObjectSchema };
+	return schema;
+};
