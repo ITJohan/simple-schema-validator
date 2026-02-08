@@ -21,6 +21,18 @@ export const string = ({ fallback = "", message = "Not a string" } = {}) => {
 			return schema;
 		},
 		/**
+		 * @param {number} max
+		 * @param {object} [options]
+		 * @param {string} options.message
+		 */
+		max: (
+			max,
+			{ message } = { message: `Maximum string length is ${max}` },
+		) => {
+			checks.push((x) => (x.length > max ? message : undefined));
+			return schema;
+		},
+		/**
 		 *
 		 * @param {object} [options]
 		 * @param {string} options.message

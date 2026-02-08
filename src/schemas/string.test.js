@@ -49,6 +49,27 @@ describe(string.name, () => {
 		});
 	});
 
+	describe("max", () => {
+    it("should allow strings shorter than or equal to max length", () => {
+      const schema = string().max(5);
+      deepStrictEqual(schema.parse("abc"), { data: "abc", errors: undefined });
+      deepStrictEqual(schema.parse("abcde"), { data: "abcde", errors: undefined });
+    });
+
+    it("should fail for strings longer than max length", () => {
+      const schema = string().max(3);
+      deepStrictEqual(schema.parse("abcd"), { 
+        data: "abcd", 
+        errors: ["Maximum string length is 3"] 
+      });
+    });
+
+    it("should support custom max error messages", () => {
+      const schema = string().max(2, { message: "Too many characters!" });
+      deepStrictEqual(schema.parse("abc").errors, ["Too many characters!"]);
+    });
+  });
+
 	describe("email", () => {
 		it("should validate a valid email", () => {
 			deepStrictEqual(
