@@ -58,7 +58,8 @@ export const string = ({ fallback = "", message = "Not a string" } = {}) => {
 			}
 
 			if (errors.length > 0) return { data, errors };
-			return { data };
+			
+			return { data, errors: undefined };
 		},
 	};
 
