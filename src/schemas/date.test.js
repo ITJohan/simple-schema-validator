@@ -1,40 +1,51 @@
-import { deepEqual, throws } from "node:assert";
+import { deepStrictEqual, ok } from "node:assert";
 import { describe, it } from "node:test";
-import { DateSchema } from "./date.js";
+import { date } from "./date.js";
 
-describe(DateSchema.name, () => {
-	it("should validate a valid datetime string", () => {
-		deepEqual(new DateSchema().parse("2025-09-12"), 1757635200000);
-		deepEqual(new DateSchema().parse("2025-09-12T05:53"), 1757649180000);
-		deepEqual(new DateSchema().parse("2025-09-12T05:53:39"), 1757649219000);
-		deepEqual(new DateSchema().parse("2025-09-12T05:53:39.1"), 1757649219100);
-		deepEqual(new DateSchema().parse("2025-09-12T05:53:39.12"), 1757649219120);
-		deepEqual(new DateSchema().parse("2025-09-12T05:53:39.123"), 1757649219123);
-		deepEqual(
-			new DateSchema().parse("2025-09-12T05:53:39.123Z"),
-			1757656419123,
-		);
-	});
+describe("date", () => {
+  it("should validate a Date object", () => {
+    const now = new Date();
+    const result = date().parse(now);
+    deepStrictEqual(result.data.getTime(), now.getTime());
+    deepStrictEqual(result.errors, undefined);
+  });
 
-	it("should invalidate an invalid datetime string", () => {
-		throws(() => new DateSchema().parse(""));
-		throws(() => new DateSchema().parse("2025-0"));
-		throws(() => new DateSchema().parse("2025-09-12T"));
-		throws(() => new DateSchema().parse("2025-99-12"));
-		throws(() => new DateSchema().parse("2025-09-12T0"));
-		throws(() => new DateSchema().parse("2025-09-12T05"));
-		throws(() => new DateSchema().parse("2025-09-12T05:"));
-		throws(() => new DateSchema().parse("2025-09-12T05:5"));
-		throws(() => new DateSchema().parse("2025-09-12T05:53:"));
-		throws(() => new DateSchema().parse("2025-09-12T05:53:3"));
-		throws(() => new DateSchema().parse("2025-09-12T05:53:39."));
-	});
+  it("should parse a valid date string", () => {
+    const iso = "2024-01-01T00:00:00.000Z";
+    const result = date().parse(iso);
+    ok(result.data instanceof Date);
+    deepStrictEqual(result.data.toISOString(), iso);
+  });
 
-	it("should support validating a timestamp", () => {
-		deepEqual(new DateSchema().parse(1757635200000), 1757635200000);
-	});
+  it("should invalidate non-date values and use fallback", () => {
+    const fallback = new Date("1990-01-01");
+    const schema = date({ fallback, message: "Not a date" });
+    
+    deepStrictEqual(schema.parse("not-a-date"), { data: fallback, errors: ["Not a date"] });
+    deepStrictEqual(schema.parse(null), { data: fallback, errors: ["Not a date"] });
+    deepStrictEqual(schema.parse(undefined), { data: fallback, errors: ["Not a date"] });
+  });
 
-	it("should invalidate an invalid timestamp", () => {
-		throws(() => new DateSchema().parse(-1));
-	});
+  describe("min and max constraints", () => {
+    const jan1 = new Date("2024-01-01");
+    const jan10 = new Date("2024-01-10");
+    const jan20 = new Date("2024-01-20");
+
+    it("should fail if date is before min", () => {
+      const schema = date().min(jan10);
+      const result = schema.parse(jan1);
+      deepStrictEqual(result.errors?.[0], `Date must be after ${jan10.toISOString()}`);
+    });
+
+    it("should fail if date is after max", () => {
+      const schema = date().max(jan10);
+      const result = schema.parse(jan20);
+      deepStrictEqual(result.errors?.[0], `Date must be before ${jan10.toISOString()}`);
+    });
+
+    it("should pass when within range", () => {
+      const schema = date().min(jan1).max(jan20);
+      deepStrictEqual(schema.parse(jan10).errors, undefined);
+    });
+  });
 });
