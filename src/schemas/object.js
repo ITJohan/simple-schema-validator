@@ -1,7 +1,10 @@
+/** @import { boolean } from './boolean.js' */
+/** @import { date } from './date.js' */
+/** @import { number } from './number.js' */
 /** @import { string } from './string.js' */
 
 /**
- * @template {Record<string, ReturnType<typeof string>>} S
+ * @template {Record<string, ReturnType<typeof boolean | typeof date | typeof number | typeof string>>} S
  * @param {S} shape
  * @param {object} [options]
  * @param {string} [options.message]

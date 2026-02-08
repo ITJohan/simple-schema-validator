@@ -1,7 +1,10 @@
-import { deepStrictEqual } from "node:assert";
+import { deepStrictEqual, ok } from "node:assert";
 import { describe, it } from "node:test";
 import { object } from "./object.js";
 import { string } from "./string.js";
+import { number } from "./number.js";
+import { boolean } from "./boolean.js";
+import { date } from "./date.js";
 
 describe(object.name, () => {
 	it("should return a valid data object given a valid schema", () => {
@@ -70,4 +73,75 @@ describe(object.name, () => {
 		const result = userSchema.parse(user);
 		deepStrictEqual(result, expected);
 	});
+
+	it("should validate a complex object with multiple types", () => {
+    const registrationDate = new Date("2024-01-01");
+    const schema = object({
+      username: string().min(3),
+      age: number().min(18),
+      isActive: boolean(),
+      joinedAt: date()
+    });
+
+    const input = {
+      username: "alex",
+      age: 25,
+      isActive: true,
+      joinedAt: registrationDate
+    };
+
+    const result = schema.parse(input);
+
+    deepStrictEqual(result.data, input);
+    deepStrictEqual(result.errors, {
+      username: undefined,
+      age: undefined,
+      isActive: undefined,
+      joinedAt: undefined
+    });
+  });
+
+  it("should accumulate errors across different types simultaneously", () => {
+    const schema = object({
+      count: number().positive(),
+      isAdmin: boolean().true(),
+      birthday: date().min(new Date("2000-01-01"))
+    });
+
+    const input = {
+      count: -5,
+      isAdmin: false,
+      birthday: new Date("1990-01-01")
+    };
+
+    const result = schema.parse(input);
+
+    deepStrictEqual(result.errors.count, ["Not a positive number"]);
+    deepStrictEqual(result.errors.isAdmin, ["Must be true"]);
+    ok(result.errors.birthday?.[0].includes("Date must be after"));
+  });
+
+  it("should handle missing keys by using the sub-schemas' fallback logic", () => {
+    const schema = object({
+      score: number({ fallback: 0 }),
+      verified: boolean({ fallback: false })
+    });
+
+    const result = schema.parse({});
+
+    deepStrictEqual(result.data, { score: 0, verified: false });
+    deepStrictEqual(result.errors.score, ["Not a number"]);
+    deepStrictEqual(result.errors.verified, ["Not a boolean"]);
+  });
+
+  it("should gracefully handle non-object inputs", () => {
+    const schema = object({
+      name: string({ fallback: "Guest" })
+    });
+
+    const result = schema.parse("I am not an object");
+
+    deepStrictEqual(result.data, { name: "Guest" });
+    deepStrictEqual(result.errors.name, ["Not a string"]);
+  });
 });
