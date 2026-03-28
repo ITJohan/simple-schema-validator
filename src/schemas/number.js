@@ -38,7 +38,7 @@ export const number = ({ fallback = 0, message = "Not a number" } = {}) => {
 		 * @param {string} options.message
 		 */
 		positive: ({ message } = { message: "Not a positive number" }) => {
-			checks.push((x) => x < 0 ? message : undefined);
+			checks.push((x) => (x < 0 ? message : undefined));
 			return schema;
 		},
 		/**
@@ -66,7 +66,7 @@ export const number = ({ fallback = 0, message = "Not a number" } = {}) => {
 			}
 
 			if (errors.length > 0) return { data, errors };
-			
+
 			return { data, errors: undefined };
 		},
 	};
