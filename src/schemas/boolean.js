@@ -30,6 +30,7 @@ export const boolean = ({
 		/**
 		 * @param {unknown} x
 		 * @returns {{
+		 * success: boolean;
 		 * data: boolean;
 		 * errors?: string[];
 		 * }}
@@ -51,9 +52,9 @@ export const boolean = ({
 				if (error) errors.push(error);
 			}
 
-			if (errors.length > 0) return { data, errors };
+			if (errors.length > 0) return { success: false, data, errors };
 
-			return { data, errors: undefined };
+			return { success: true, data, errors: undefined };
 		},
 	};
 

@@ -44,6 +44,7 @@ export const number = ({ fallback = 0, message = "Not a number" } = {}) => {
 		/**
 		 * @param {unknown} x
 		 * @returns {{
+		 * 	success: boolean;
 		 * 	data: number;
 		 * 	errors?: string[];
 		 * }}
@@ -65,9 +66,9 @@ export const number = ({ fallback = 0, message = "Not a number" } = {}) => {
 				if (error) errors.push(error);
 			}
 
-			if (errors.length > 0) return { data, errors };
+			if (errors.length > 0) return { success: false, data, errors };
 
-			return { data, errors: undefined };
+			return { success: true, data, errors: undefined };
 		},
 	};
 

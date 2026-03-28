@@ -6,15 +6,18 @@ describe("date", () => {
 	it("should validate a Date object", () => {
 		const now = new Date();
 		const result = date().parse(now);
-		deepStrictEqual(result.data.getTime(), now.getTime());
-		deepStrictEqual(result.errors, undefined);
+		deepStrictEqual(result, { success: true, data: now, errors: undefined });
 	});
 
 	it("should parse a valid date string", () => {
 		const iso = "2024-01-01T00:00:00.000Z";
 		const result = date().parse(iso);
 		ok(result.data instanceof Date);
-		deepStrictEqual(result.data.toISOString(), iso);
+		deepStrictEqual(result, {
+			success: true,
+			data: new Date(iso),
+			errors: undefined,
+		});
 	});
 
 	it("should invalidate non-date values and use fallback", () => {
@@ -22,14 +25,17 @@ describe("date", () => {
 		const schema = date({ fallback, message: "Not a date" });
 
 		deepStrictEqual(schema.parse("not-a-date"), {
+			success: false,
 			data: fallback,
 			errors: ["Not a date"],
 		});
 		deepStrictEqual(schema.parse(null), {
+			success: false,
 			data: fallback,
 			errors: ["Not a date"],
 		});
 		deepStrictEqual(schema.parse(undefined), {
+			success: false,
 			data: fallback,
 			errors: ["Not a date"],
 		});
@@ -43,24 +49,30 @@ describe("date", () => {
 		it("should fail if date is before min", () => {
 			const schema = date().min(jan10);
 			const result = schema.parse(jan1);
-			deepStrictEqual(
-				result.errors?.[0],
-				`Date must be after ${jan10.toISOString()}`,
-			);
+			deepStrictEqual(result, {
+				success: false,
+				data: jan1,
+				errors: [`Date must be after ${jan10.toISOString()}`],
+			});
 		});
 
 		it("should fail if date is after max", () => {
 			const schema = date().max(jan10);
 			const result = schema.parse(jan20);
-			deepStrictEqual(
-				result.errors?.[0],
-				`Date must be before ${jan10.toISOString()}`,
-			);
+			deepStrictEqual(result, {
+				success: false,
+				data: jan20,
+				errors: [`Date must be before ${jan10.toISOString()}`],
+			});
 		});
 
 		it("should pass when within range", () => {
 			const schema = date().min(jan1).max(jan20);
-			deepStrictEqual(schema.parse(jan10).errors, undefined);
+			deepStrictEqual(schema.parse(jan10), {
+				success: true,
+				data: jan10,
+				errors: undefined,
+			});
 		});
 	});
 });

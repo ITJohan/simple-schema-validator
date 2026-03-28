@@ -37,7 +37,7 @@ export const date = ({
 		},
 		/**
 		 * @param {unknown} x
-		 * @returns {{ data: Date; errors?: string[] }}
+		 * @returns {{ success: boolean; data: Date; errors?: string[] }}
 		 */
 		parse: (x) => {
 			/** @type {string[]} */
@@ -61,7 +61,9 @@ export const date = ({
 				if (error) errors.push(error);
 			}
 
-			return errors.length > 0 ? { data, errors } : { data, errors: undefined };
+			return errors.length > 0
+				? { success: false, data, errors }
+				: { success: true, data, errors: undefined };
 		},
 	};
 

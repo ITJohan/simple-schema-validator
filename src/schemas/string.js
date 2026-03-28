@@ -48,6 +48,7 @@ export const string = ({ fallback = "", message = "Not a string" } = {}) => {
 		/**
 		 * @param {unknown} x
 		 * @returns {{
+		 * 	success: boolean;
 		 * 	data: string;
 		 * 	errors?: string[];
 		 * }}
@@ -69,9 +70,9 @@ export const string = ({ fallback = "", message = "Not a string" } = {}) => {
 				if (error) errors.push(error);
 			}
 
-			if (errors.length > 0) return { data, errors };
-			
-			return { data, errors: undefined };
+			if (errors.length > 0) return { success: false, data, errors };
+
+			return { success: true, data, errors: undefined };
 		},
 	};
 
