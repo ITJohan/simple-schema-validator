@@ -1,4 +1,4 @@
-import { deepStrictEqual, ok } from "node:assert";
+import { deepStrictEqual } from "node:assert";
 import { describe, it } from "node:test";
 import { boolean } from "./boolean.js";
 import { date } from "./date.js";
@@ -13,6 +13,7 @@ describe(object.name, () => {
 		});
 		const validUser = { name: "John" };
 		const expected = {
+			success: true,
 			data: { name: "John" },
 			errors: { name: undefined },
 		};
@@ -26,6 +27,7 @@ describe(object.name, () => {
 		});
 		const validUser = { name: "Jo" };
 		const expected = {
+			success: false,
 			data: { name: "Jo" },
 			errors: { name: ["Too short"] },
 		};
@@ -39,6 +41,7 @@ describe(object.name, () => {
 		});
 		const user = { name: 1 };
 		const expected = {
+			success: false,
 			data: { name: "Wrong!" },
 			errors: { name: ["Not a string"] },
 		};
@@ -53,6 +56,7 @@ describe(object.name, () => {
 		});
 		const user = { name: "John Doe", hobby: "Biking" };
 		const expected = {
+			success: true,
 			data: { name: "John Doe", hobby: "Biking" },
 			errors: { name: undefined, hobby: undefined },
 		};
@@ -67,6 +71,7 @@ describe(object.name, () => {
 		});
 		const user = { name: "Jo", hobby: "Biking" };
 		const expected = {
+			success: false,
 			data: { name: "Jo", hobby: "Biking" },
 			errors: { name: ["Too short"], hobby: undefined },
 		};
@@ -92,12 +97,15 @@ describe(object.name, () => {
 
 		const result = schema.parse(input);
 
-		deepStrictEqual(result.data, input);
-		deepStrictEqual(result.errors, {
-			username: undefined,
-			age: undefined,
-			isActive: undefined,
-			joinedAt: undefined,
+		deepStrictEqual(result, {
+			success: true,
+			data: input,
+			errors: {
+				username: undefined,
+				age: undefined,
+				isActive: undefined,
+				joinedAt: undefined,
+			},
 		});
 	});
 
@@ -116,9 +124,15 @@ describe(object.name, () => {
 
 		const result = schema.parse(input);
 
-		deepStrictEqual(result.errors.count, ["Not a positive number"]);
-		deepStrictEqual(result.errors.isAdmin, ["Must be true"]);
-		ok(result.errors.birthday?.[0].includes("Date must be after"));
+		deepStrictEqual(result, {
+			success: false,
+			data: input,
+			errors: {
+				count: ["Not a positive number"],
+				isAdmin: ["Must be true"],
+				birthday: ["Date must be after 2000-01-01T00:00:00.000Z"],
+			},
+		});
 	});
 
 	it("should handle missing keys by using the sub-schemas' fallback logic", () => {
@@ -129,9 +143,14 @@ describe(object.name, () => {
 
 		const result = schema.parse({});
 
-		deepStrictEqual(result.data, { score: 0, verified: false });
-		deepStrictEqual(result.errors.score, ["Not a number"]);
-		deepStrictEqual(result.errors.verified, ["Not a boolean"]);
+		deepStrictEqual(result, {
+			success: false,
+			data: { score: 0, verified: false },
+			errors: {
+				score: ["Not a number"],
+				verified: ["Not a boolean"],
+			},
+		});
 	});
 
 	it("should gracefully handle non-object inputs", () => {
@@ -141,7 +160,12 @@ describe(object.name, () => {
 
 		const result = schema.parse("I am not an object");
 
-		deepStrictEqual(result.data, { name: "Guest" });
-		deepStrictEqual(result.errors.name, ["Not a string"]);
+		deepStrictEqual(result, {
+			success: false,
+			data: { name: "Guest" },
+			errors: {
+				name: ["Not a string"],
+			},
+		});
 	});
 });

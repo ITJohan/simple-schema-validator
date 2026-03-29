@@ -15,6 +15,11 @@ export const object = (shape) => {
 	const schema = {
 		/**
 		 * @param {unknown} x
+		 * @returns {{
+		 * success: boolean;
+		 * data: { [K in keyof S]: ReturnType<S[K]["parse"]>["data"] };
+		 * errors: { [K in keyof S]: string[] | undefined };
+		 * }}
 		 */
 		parse: (x) => {
 			const isObject = x !== null && typeof x === "object" && !Array.isArray(x);
@@ -24,15 +29,23 @@ export const object = (shape) => {
 				(acc, key) => {
 					const parsedProperty = shape[key].parse(input[key]);
 
+					if (!parsedProperty.success) {
+						acc.success = false;
+					}
+
 					acc.data[key] = parsedProperty.data;
 					acc.errors[key] = parsedProperty.errors;
 
 					return acc;
 				},
-				{
-					data: /** @type {{ [K in keyof S]: ReturnType<S[K]["parse"]>["data"] }} */ ({}),
-					errors: /** @type {{ [K in keyof S]: string[] | undefined }} */ ({}),
-				},
+				/**
+				 * @type {{
+				 * 	success: boolean;
+				 * 	data: { [K in keyof S]: ReturnType<S[K]["parse"]>["data"] };
+				 * 	errors: { [K in keyof S]: string[] | undefined };
+				 * }}
+				 */
+				({ success: true, data: {}, errors: {} }),
 			);
 		},
 	};
